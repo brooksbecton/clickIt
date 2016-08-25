@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %> | clickIt Quiz</title>
+    <% include ../partials/head %>
+<!--     <link rel='stylesheet' href='/stylesheets/style.css' />-->
+  </head>
+  <body>
+    <h1>Start a Quiz</h1>
+    <label for="instructor">Intructor</label><br>
+    <input id="instructor" type="text" name="qInstructor"><br>
+    <label for="name">Quiz Name</label><br>
+    <input id="name" type="text" name="qName"><br>
+    <label for="points">Points</label><br>
+    <input id="points" type="text" name="qPoints"><br>
+    <label for="type">Quiz Type</label><br>
+    <input id="type" type="select" name="qType"><br>
+    <input type="submit" name="submit">
+  </body>
+</html>

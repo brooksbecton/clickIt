@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %> | clickIt Quiz</title>
+    <% include ../partials/head %>
+<!--     <link rel='stylesheet' href='/stylesheets/style.css' />-->
+  </head>
+  <body>
+    <h1>Join a Quiz</h1>
+    <p>Fill out form to join!</p>
+    <form method="post" action="start">
+        <label for="name">Quiz ID</label><br>
+        <input id="name" type="text" name="id"><br>
+        <input type="submit" name="submit">
+    </form>
+  </body>
+</html>
