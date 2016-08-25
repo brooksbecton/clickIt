@@ -4,5 +4,9 @@ body {
 }
 
 a {
-  color: #00B7FF;
+  color: green;
+}
+
+#red {
+    color: red;
 }

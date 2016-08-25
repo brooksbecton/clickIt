@@ -1,43 +1,115 @@
 var express = require('express');
+var firebaseConfig = require('./../private/firebaseInfo.json');
+
+var firebase = require("firebase");
+var shortid = require('shortid');
+var path = require('path');
+
 var router = express.Router();
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('quiz/index', { title: '' });
-});
+function Quizzer(){
 
-/* GET start quiz page */
-router.get('/create', function(req, res, next) {
-  res.render('quiz/createQuiz', { title: 'Create' });
-});
+  var _this = this;
 
-/* GET join quiz page */
-router.get('/join', function(req, res, next) {
-  res.render('quiz/joinQuiz', { title: 'Join' });
-});
-
-/* GET start quiz page */
-router.post('/start', function(req, res, next) {
-  var id = req.body.id;
-
-  //Need to figure out how to access quizMaster from app.js
-  if(quizMaster.quizExists(id)){
-
-    console.log("Good connect for start quiz");
-    console.log("ID: " + req.body.id)
-    res.render('quiz/startQuiz', { title: 'Start' });
+  this.addPlayerToQuiz = function(id, player){
+    if(_this.quizExists(id)){
+      quizzes[id]['students'].push(player);
+      writePlayerToDB(id, player);
+    }
+    else{
+      console.log("Quiz does not exist");
+    }
   }
-  else {
-    console.log("ERROR: Bad connect for start quiz");
-    console.log("ID: " + req.body.id)
-    res.render('quiz/startQuizFail', { 
-        title: 'Start', 
-        error: 'Missing Quiz Id' 
+
+  this.quizExists = function(id) {
+    console.log(quizzes[id]);
+    try {
+      if (quizzes[id] != undefined) {
+        return true;
+      }
+    } catch (err) {
+      return false;
+    }
+  }
+
+  function generateId() {
+    return shortid.generate();
+  }
+
+  this.initQuiz = function(qInstructor, qName, qType){
+    var newQuiz = new multiChoiceQuiz();
+    var quizId = generateId();
+
+    newQuiz['id'] = quizId;
+    newQuiz['instructor'] = qInstructor;
+    newQuiz['quizName'] = qName;
+    newQuiz['type'] = qType;
+
+    quizzes[quizId] = newQuiz;
+
+    writeQuizToDB(quizId, newQuiz);
+
+    var player =  {'id': generateId(),'name': 'brooks', 'score': 10};
+    _this.addPlayerToQuiz(quizId, player);
+  };
+
+  var multiChoiceQuiz = function(){
+    var newQuiz = {
+      'id': 0,
+      'instructor': "Anonymous",
+      'questions': [
+        {
+          'question': 'What color is the sky?',
+          'answers': ['red', 'blue', 'green', 'yellow'],
+          'questionPoints': 10
+        },
+        {
+          'question': 'What color is the sun?',
+          'answers': ['red', 'blue', 'green', 'yellow'],
+          'questionPoints': 10
+        },
+      ],
+      'quizName': 'Unnamed Quiz',
+      'students': [],
+      'type': 'multiChoice'
+    }
+    return newQuiz;
+  }
+
+  var multiChoiceTaker = function(){
+    var newTaker = {
+      'id': "",
+      'name': "",
+      'score': 0
+    }
+  }
+
+  function writePlayerToDB(id, player){
+    firebase.database().ref('quizzes/' + id + /players/ + player['id']).set({
+      player
     });
   }
 
-});
+  function writeQuizToDB(id, quiz){
+    firebase.database().ref('quizzes/' + id).set({
+      quiz: quiz
+    });
+  }
 
+  //Holds all instances of quizzes by Id
+  var quizzes = {};
+} 
 
+//Firebase
+var config = {
+  apiKey: firebaseConfig['apiKey'],
+  authDomain: firebaseConfig['authDomain'],
+  databaseURL: firebaseConfig['databaseURL'],
+  storageBucket: firebaseConfig['storageBucket']
+};
+firebase.initializeApp(config);
+
+var quizMaster = new Quizzer;
+// quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice');
 
 module.exports = router;
