@@ -1,11 +1,18 @@
 var express = require('express');
 var firebaseConfig = require('./../private/firebaseInfo.json');
-
 var firebase = require("firebase");
 var shortid = require('shortid');
 var path = require('path');
 
 var router = express.Router();
+
+/* 
+    Any request made to the quiz module will be sent the index.
+    The index has AngularJS which is handling the routing. 
+*/
+router.get('*', function(req, res) {
+  res.sendFile("main.html", { root: path.join(__dirname, '../quiz') });
+});
 
 function Quizzer(){
 

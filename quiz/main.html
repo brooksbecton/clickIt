@@ -15,9 +15,9 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
 
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
-     <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
-     <link rel='stylesheet' href='/stylesheets/style.css' />
-  <script type="text/javascript">
+    <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
+    <link rel='stylesheet' href='/stylesheets/style.css' />
+    <script type="text/javascript">
     var app = angular.module("quizModule", ["ngRoute"]);
 
     app.config(function($routeProvider) {
@@ -25,10 +25,13 @@
         .when("/", {
         })
         .when("/red", {
+            templateUrl : '../quiz/welcome.html'
         })
         .when("/green", {
+            // templateUrl : null
         })
         .when("/blue", {
+            // templateUrl : null
         });
     });
 
