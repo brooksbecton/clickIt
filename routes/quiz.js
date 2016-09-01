@@ -14,6 +14,15 @@ router.get('*', function(req, res) {
   res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
 });
 
+/* 
+  Watching for answers submitted by takers
+*/
+router.post('/questions/submit/', function (req, res) {
+  var answers = req.body.answers;
+  console.log(answers);
+  //TODO Store answers in DB
+});
+
 function Quizzer(){
 
   var _this = this;
