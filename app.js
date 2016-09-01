@@ -25,17 +25,7 @@ app.use('/users', users);
 app.use('/quiz', quiz);
 
 //Serving quiz folder's files when asked for
-app.use('/quiz', express.static(__dirname + '/quiz'));
-app.use("/quiz",function(req,res){
-    res.sendFile(path.join(__dirname,"/quiz/main.html"));
-});
-
-
-
-
-
-
-
+app.use('/public', express.static(__dirname + '/public'));
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

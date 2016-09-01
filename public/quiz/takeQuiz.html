@@ -1,0 +1,12 @@
+<h1 ng-bind="quiz.quizName"></h1>
+<form ng-submit="submitQuiz()">
+    <div ng-repeat="(key, question) in quiz.questions">
+        <h3 ng-bind="question.text"></h3>
+        <md-radio-group ng-model="quizAnswers[key]">
+            <md-radio-button ng-repeat="answer in question.answers" aria-label="{{answer}}" value="{{answer}}">
+                <p ng-bind="answer"></p>
+            </md-radio-button>
+        </md-radio-group>
+    </div>
+    <md-button type="submit" value="submit" aria-label="Submit" class="md-primary md-raised">Submit</md-button>
+</form>

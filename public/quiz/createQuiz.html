@@ -1,0 +1,18 @@
+<h1>Create a Quiz</h1>
+<md-input-container class="md-block" flex-gt-sm="">
+    <label>Instructor Name</label>
+    <input >
+</md-input-container>
+<md-input-container class="md-block" flex-gt-sm="">
+    <label>Quiz Name</label>
+    <input >
+</md-input-container>
+<md-input-container class="md-block" flex-gt-sm="">
+    <label>Project Type</label>
+    <md-select name="type" ng-model="project.type" required="">
+        <md-option value="multiChoice">Multi-Choice</md-option>
+        <md-option value="fillInTheBlank" disabled>Fill in the Blank</md-option>
+        <md-option value="freeResponse" disabled>Free Response</md-option>
+    </md-select>
+</md-input-container>
+<md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>

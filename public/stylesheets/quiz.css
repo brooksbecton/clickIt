@@ -1,0 +1,24 @@
+    
+  .top-nav{
+    background-color: white;  
+  }
+      
+    h1, h2, h3, h4, h5, h6{
+      font-family: 'Oswald', sans-serif;
+    }
+    md-sidenav  {
+      background-color: gainsboro;
+      margin-right: 20px;
+      max-width: 20%;
+      width: 20%;height: 100vh;
+    }
+
+    md-content {
+      padding:20px;
+    }
+    
+
+/*
+Copyright 2016 Google Inc. All Rights Reserved. 
+Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+*/

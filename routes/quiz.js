@@ -11,7 +11,7 @@ var router = express.Router();
     The index has AngularJS which is handling the routing. 
 */
 router.get('*', function(req, res) {
-  res.sendFile("main.html", { root: path.join(__dirname, '../quiz') });
+  res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
 });
 
 function Quizzer(){
