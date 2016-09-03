@@ -20,6 +20,7 @@ router.get('*', function(req, res) {
 router.post('/questions/submit/', function (req, res) {
   var answers = req.body.answers;
   console.log(answers);
+  res.send('success');
   //TODO Store answers in DB
 });
 

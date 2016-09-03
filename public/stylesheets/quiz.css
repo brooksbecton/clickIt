@@ -3,9 +3,14 @@
     background-color: white;  
   }
       
-    h1, h2, h3, h4, h5, h6{
+    .main-logo, h1, h2, h3, h4, h5, h6{
       font-family: 'Oswald', sans-serif;
     }
+
+    .main-logo{
+      font-size: 40px;
+    }
+
     md-sidenav  {
       background-color: gainsboro;
       margin-right: 20px;
@@ -17,7 +22,14 @@
       padding:20px;
     }
     
+    .sign-in-button{
+      float: right;
+      font-family: 'Oswald', sans-serif;
+      position: absolute;
+      right: 10px;
+      top: 10px;
 
+    }
 /*
 Copyright 2016 Google Inc. All Rights Reserved. 
 Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.

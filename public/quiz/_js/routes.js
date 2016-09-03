@@ -19,8 +19,12 @@ angular.module("quizModule").config(function ($routeProvider) {
             templateUrl: '/public/quiz/welcome.html',
             title: "Home",
         })
-        .otherwise({
+        .when("/", {
             templateUrl: '/public/quiz/welcome.html',
             title: "Home",
+        })
+        .otherwise({
+            templateUrl: '/public/quiz/404.html',
+            title: "Page Not Found",
         });
 });

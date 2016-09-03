@@ -1,12 +1,14 @@
 <h1 ng-bind="quiz.quizName"></h1>
-<form ng-submit="submitQuiz()">
+<form name="quizForm" ng-submit="submitQuiz()">
     <div ng-repeat="(key, question) in quiz.questions">
         <h3 ng-bind="question.text"></h3>
-        <md-radio-group ng-model="quizAnswers[key]">
+        <md-radio-group ng-model="quizAnswers[key]" required>
             <md-radio-button ng-repeat="answer in question.answers" aria-label="{{answer}}" value="{{answer}}">
                 <p ng-bind="answer"></p>
             </md-radio-button>
         </md-radio-group>
     </div>
-    <md-button type="submit" value="submit" aria-label="Submit" class="md-primary md-raised">Submit</md-button>
+      <md-button ng-click="submitQuiz()" ng-hide="quizForm.$invalid" class="md-accent md-fab md-fab-bottom-right">
+        &#x2714;
+      </md-button>
 </form>
