@@ -117,14 +117,10 @@ function Quizzer(){
   var quizzes = {};
 } 
 
-//Firebase
-var config = {
-  apiKey: firebaseConfig['apiKey'],
-  authDomain: firebaseConfig['authDomain'],
-  databaseURL: firebaseConfig['databaseURL'],
-  storageBucket: firebaseConfig['storageBucket']
-};
-firebase.initializeApp(config);
+firebase.initializeApp({
+  serviceAccount: "private/clickIt-97f9d21e813e.json",
+  databaseURL: "https://clickit-5cb47.firebaseio.com",
+});
 
 var quizMaster = new Quizzer;
 // quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice');
