@@ -24,6 +24,12 @@ router.post('/questions/submit/', function (req, res) {
   //TODO Store answers in DB
 });
 
+function writeAnswers(user, id, answers){
+  firebase.database().ref('quizzes/' + id + /answers/ + user['answers']).set({
+      answers
+    });
+}
+
 function Quizzer(){
 
   var _this = this;
