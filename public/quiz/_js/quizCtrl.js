@@ -1,6 +1,10 @@
-angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $rootScope, $route) {
+   
+var provider = new firebase.auth.GoogleAuthProvider();
+
+angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $location, $rootScope, $route) {
 
   $scope.quiz = {
+    "id": '123',
     "questions": {
       "laksjdmasdbf,mnabsd": { "text": "What color is the sky?", "answers": ["Blue", "Recursion", "Green", "Red"], "correctAnswers": 0 },
       "m,absdfuicvnbakjsdv": { "text": "If a chicken had lips, would it whistle?", "answers": ["Yes", "No", "Singe Source of Truth Design", "Open/Close Principle"], "correctAnswers": 1 }
@@ -8,9 +12,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
     "quizName": "CSCI Final Exam",
   };
   $scope.errors = {};
-  $scope.quizAnswers = createBlanksAnswers($scope.quiz);
-
-  $scope.getQuizQuestions = function (id) {
+  $scope.quizAnswers = initAnswers($scope.quiz);
     $http({
       method: 'GET',
       url: '/quiz/questions'
@@ -25,9 +27,12 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
   /*
     Sends answer object to back end for saving. 
   */
-  $scope.submitQuiz = function () {
+  $scope.submitQuiz = function (quizId) {
+
+    var data = {"answers": $scope.quizAnswers, 'quizId': quizId, "userId": $scope.user.uid}
+
     $http({
-      data: { answers: $scope.quizAnswers },
+      data,
       method: 'POST',
       url: 'questions/submit/'
     }).then(function success(response) {
@@ -42,7 +47,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
     Creates an Answer Object that will be 
     sent to the server to be saved for the taker 
   */
-  function createBlanksAnswers(quiz) {
+  function initAnswers(quiz) {
     var newAnswers = {};
 
     for (key in $scope.quiz['questions']) {
@@ -54,11 +59,9 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
 
   $scope.requiredQuestionsMet = function(){
     if(quizForm.$invalid){
-      console.log('true' + $scope.quizForm.$dirty);
       return false;
     }
     else{
-      console.log('false' + $scope.quizForm.$dirty);
       return false;
     }
   }
@@ -66,19 +69,16 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
   $scope.googleSignIn = function(){
     firebase.auth().signInWithPopup(provider).then(function(result) {
       // This gives you a Google Access Token. You can use it to access the Google API.
-      var token = result.credential.accessToken;
+      $scope.googleToken = result.credential.accessToken;
       // The signed-in user info.
-      var user = result.user;
-      // ...
+      $scope.user = result.user;
     }).catch(function(error) {
       // Handle Errors here.
       var errorCode = error.code;
       var errorMessage = error.message;
       // The email of the user's account used.
       var email = error.email;
-      // The firebase.auth.AuthCredential type that was used.
       var credential = error.credential;
-      // ...
     });
   }
 
@@ -94,6 +94,14 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $ro
     });
   }
 
+  $scope.signUserOut = function(){
+    firebase.auth().signOut().then(function() {
+      $location.path('/welcome');
+    }, function(error) {
+      var errorKey = 'signUserOut';
+      $scope.errors[errorKey] = error;
+    });
+  }
 
   //When the page changes in routes, it will update the title of the page
   $rootScope.$on("$routeChangeSuccess", function (currentRoute, previousRoute) {

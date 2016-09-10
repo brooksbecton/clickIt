@@ -1,18 +1,33 @@
 <h1>Create a Quiz</h1>
-<md-input-container class="md-block" flex-gt-sm="">
+<md-input-container class="md-block" flex-gt-sm="" required>
     <label>Instructor Name</label>
     <input >
 </md-input-container>
-<md-input-container class="md-block" flex-gt-sm="">
+<md-input-container class="md-block" flex-gt-sm="" required>
     <label>Quiz Name</label>
-    <input >
+    <input type="text">
 </md-input-container>
-<md-input-container class="md-block" flex-gt-sm="">
+<md-input-container class="md-block" flex-gt-sm="" required>
     <label>Project Type</label>
-    <md-select name="type" ng-model="project.type" required="">
+    <md-select name="type" ng-model="quizType" required>
         <md-option value="multiChoice">Multi-Choice</md-option>
-        <md-option value="fillInTheBlank" disabled>Fill in the Blank</md-option>
-        <md-option value="freeResponse" disabled>Free Response</md-option>
+        <!-- TODO: Add back in disabled attributes to bottom two options -->
+        <md-option value="fillInTheBlank">Fill in the Blank</md-option>
+        <md-option value="freeResponse">Free Response</md-option>
     </md-select>
 </md-input-container>
+
+<!-- Case where user is trying to make a multiple choice quiz-->
+<div ng-show="quizType == 'multiChoice'">
+    <legend><h3>Create Questions</h3></legend>
+    <md-input-container class="md-block" flex-gt-sm="" required>
+        <label>Question Text</label>
+        <input type="text">
+    </md-input-container>
+    <md-input-container class="md-block" flex-gt-sm="" required>
+        <label>Answer</label>
+        <input type="text">
+    </md-input-container >
+</div>
+
 <md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>

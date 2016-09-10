@@ -6,38 +6,16 @@ var path = require('path');
 
 var router = express.Router();
 
-/* 
-    Any request made to the quiz module will be sent the index.
-    The index has AngularJS which is handling the routing. 
-*/
-router.get('*', function(req, res) {
-  res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
-});
-
-/* 
-  Watching for answers submitted by takers
-*/
-router.post('/questions/submit/', function (req, res) {
-  var answers = req.body.answers;
-  console.log(answers);
-  res.send('success');
-  //TODO Store answers in DB
-});
-
-function writeAnswers(user, id, answers){
-  firebase.database().ref('quizzes/' + id + /answers/ + user['answers']).set({
-      answers
-    });
-}
-
 function Quizzer(){
 
+  //Holds all instances of quizzes by Id
+  var quizzes = {};
   var _this = this;
 
   this.addPlayerToQuiz = function(id, player){
     if(_this.quizExists(id)){
       quizzes[id]['students'].push(player);
-      writePlayerToDB(id, player);
+      _this.writePlayerToDB(id, player);
     }
     else{
       console.log("Quiz does not exist");
@@ -45,7 +23,6 @@ function Quizzer(){
   }
 
   this.quizExists = function(id) {
-    console.log(quizzes[id]);
     try {
       if (quizzes[id] != undefined) {
         return true;
@@ -70,14 +47,12 @@ function Quizzer(){
 
     quizzes[quizId] = newQuiz;
 
-    writeQuizToDB(quizId, newQuiz);
-
-    var player =  {'id': generateId(),'name': 'brooks', 'score': 10};
-    _this.addPlayerToQuiz(quizId, player);
+    _this.writeQuizToDB(quizId, newQuiz);
   };
 
   var multiChoiceQuiz = function(){
     var newQuiz = {
+      'answers': {},
       'id': 0,
       'instructor': "Anonymous",
       'questions': [
@@ -92,7 +67,7 @@ function Quizzer(){
           'questionPoints': 10
         },
       ],
-      'quizName': 'Unnamed Quiz',
+      'quizName': '',
       'students': [],
       'type': 'multiChoice'
     }
@@ -107,20 +82,47 @@ function Quizzer(){
     }
   }
 
-  function writePlayerToDB(id, player){
+  this.writeAnswersToDB = function(userId, quizId, answers){
+    firebase.database().ref('quizzes/' + quizId + /answers/ + userId + '/').set({
+        answers
+      });
+  }
+
+  this.writePlayerToDB = function(id, player){
     firebase.database().ref('quizzes/' + id + /players/ + player['id']).set({
       player
     });
   }
 
-  function writeQuizToDB(id, quiz){
+  this.writeQuizToDB = function(id, quiz){
     firebase.database().ref('quizzes/' + id).set({
       quiz: quiz
     });
   }
 
-  //Holds all instances of quizzes by Id
-  var quizzes = {};
+  /* 
+      Any request made to the quiz module will be sent the index.
+      The index has AngularJS which is handling the routing. 
+  */
+  router.get('*', function(req, res) {
+    res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
+  });
+
+  /* 
+    Watching for answers submitted by users
+  */
+  router.post('/questions/submit/', function (req, res) {
+    var answers = req.body.answers;
+    var quizId = req.body.quizId;  
+    var userId = req.body.userId;
+
+    quizzes[quizId]['answers'][quizId] 
+    _this.writeAnswersToDB(userId, quizId, answers);
+
+    res.send('success');
+  });
+
+
 } 
 
 firebase.initializeApp({
@@ -128,7 +130,19 @@ firebase.initializeApp({
   databaseURL: "https://clickit-5cb47.firebaseio.com",
 });
 
+function demoAddingUserToDB(quizMaster){
+  var player =  {'id': '625344652434','name': 'bobb', 'score': 25};
+  var id = 'SkKXjqb3';
+
+  quizMaster.writePlayerToDB(id, player)
+}
+
+function demoInitQuiz(quizMaster){
+  quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice');
+}
+
 var quizMaster = new Quizzer;
-// quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice');
+// demoAddingUserToDB(quizMaster);
+// demoInitQuiz(quizMaster);
 
 module.exports = router;
