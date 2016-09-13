@@ -1,10 +1,7 @@
 <h1>Join a Quiz</h1>
-<md-input-container class="md-block" flex-gt-sm="">
-    <label>Name</label>
-    <input >
-</md-input-container>
+
 <md-input-container class="md-block" flex-gt-sm="">
     <label>Quiz ID</label>
-    <input >
+    <input ng-model="joinQuizId" type="text">
 </md-input-container>
-<md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>
+<md-button aria-label="Submit" class="md-primary md-raised" ng-click="joinQuiz(joinQuizId)"> Submit </md-button>

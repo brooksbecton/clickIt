@@ -1,5 +1,4 @@
 var express = require('express');
-var firebaseConfig = require('./../private/firebaseInfo.json');
 var firebase = require("firebase");
 var shortid = require('shortid');
 var path = require('path');
@@ -12,22 +11,24 @@ function Quizzer(){
   var quizzes = {};
   var _this = this;
 
-  this.addPlayerToQuiz = function(id, player){
-    if(_this.quizExists(id)){
-      quizzes[id]['students'].push(player);
-      _this.writePlayerToDB(id, player);
+  this.addPlayerToQuiz = function(quizId, user){
+
+    if(_this.quizExists(quizId)){
+      quizzes[quizId]['users'].push(user);
+      _this.writeUserToDB(quizId, user);
     }
     else{
-      console.log("Quiz does not exist");
     }
   }
 
   this.quizExists = function(id) {
-    try {
-      if (quizzes[id] != undefined) {
-        return true;
-      }
-    } catch (err) {
+
+    if (id in quizzes) {
+      console.log("Quiz Exists");
+      return true;
+    
+    } else {
+      console.log("Quiz does not exist");
       return false;
     }
   }
@@ -36,7 +37,7 @@ function Quizzer(){
     return shortid.generate();
   }
 
-  this.initQuiz = function(qInstructor, qName, qType){
+  this.initQuiz = function(qInstructor, qName, qType, qWhiteList){
     var newQuiz = new multiChoiceQuiz();
     var quizId = generateId();
 
@@ -44,9 +45,10 @@ function Quizzer(){
     newQuiz['instructor'] = qInstructor;
     newQuiz['quizName'] = qName;
     newQuiz['type'] = qType;
-
+    newQuiz['whiteList'] = qWhiteList;
+   
     quizzes[quizId] = newQuiz;
-
+    console.log(quizId);
     _this.writeQuizToDB(quizId, newQuiz);
   };
 
@@ -68,11 +70,12 @@ function Quizzer(){
         },
       ],
       'quizName': '',
-      'students': [],
-      'type': 'multiChoice'
+      'users': [],
+      'type': 'multiChoice',
+      'whiteList' : []
     }
     return newQuiz;
-  }
+  } 
 
   var multiChoiceTaker = function(){
     var newTaker = {
@@ -82,15 +85,26 @@ function Quizzer(){
     }
   }
 
+  this.userWhiteListed = function(quizId, user){
+    console.log(quizzes[id]);
+    if(quizzes[id].whiteList.indexOf(user.email) >= 0){
+      console.log("userWhiteListed!");
+      return true;
+    } else {
+      console.log("user not white listed!");
+      return false;
+    }
+  }
+
   this.writeAnswersToDB = function(userId, quizId, answers){
     firebase.database().ref('quizzes/' + quizId + /answers/ + userId + '/').set({
         answers
       });
   }
 
-  this.writePlayerToDB = function(id, player){
-    firebase.database().ref('quizzes/' + id + /players/ + player['id']).set({
-      player
+  this.writeUserToDB = function(quizId, user){
+    firebase.database().ref('quizzes/' + quizId + /users/ + user['uid']).set({
+      user
     });
   }
 
@@ -116,12 +130,20 @@ function Quizzer(){
     var quizId = req.body.quizId;  
     var userId = req.body.userId;
 
-    quizzes[quizId]['answers'][quizId] 
+    quizzes[quizId]['answers'][quizId];
     _this.writeAnswersToDB(userId, quizId, answers);
 
     res.send('success');
   });
 
+  router.post('/questions/join/', function (req, res) {
+    var quizId = req.body.quizId;  
+    var user = req.body.user;
+
+    _this.addPlayerToQuiz(quizId, user);
+
+    res.send('success');
+  });
 
 } 
 
@@ -134,15 +156,15 @@ function demoAddingUserToDB(quizMaster){
   var player =  {'id': '625344652434','name': 'bobb', 'score': 25};
   var id = 'SkKXjqb3';
 
-  quizMaster.writePlayerToDB(id, player)
+  quizMaster.writeUserToDB(id, player)
 }
 
 function demoInitQuiz(quizMaster){
-  quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice');
+  quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice', ['broabect@ut.utm.edu', 'codethom@ut.utm.edu']);
 }
 
 var quizMaster = new Quizzer;
 // demoAddingUserToDB(quizMaster);
-// demoInitQuiz(quizMaster);
+demoInitQuiz(quizMaster);
 
 module.exports = router;
