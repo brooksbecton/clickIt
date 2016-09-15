@@ -118,31 +118,66 @@ function Quizzer(){
       Any request made to the quiz module will be sent the index.
       The index has AngularJS which is handling the routing. 
   */
-  router.get('*', function(req, res) {
+  router.get('/', function(req, res) {
     res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
   });
 
-  /* 
-    Watching for answers submitted by users
-  */
-  router.post('/questions/submit/', function (req, res) {
-    var answers = req.body.answers;
+  /*
+    Watching for user editing quiz
+   */
+  router.get('/quiz/exists/', function (req, res) {
     var quizId = req.body.quizId;  
-    var userId = req.body.userId;
+    var user = req.body.user;
 
-    quizzes[quizId]['answers'][quizId];
-    _this.writeAnswersToDB(userId, quizId, answers);
+    if(_this.quizExists()){
+      res.send(true);
+    } else {
+      res.send(false);
+    }
 
-    res.send('success');
   });
 
-  router.post('/questions/join/', function (req, res) {
+  /*
+    Watching for user editing quiz
+   */
+  router.post('/quiz/get/', function (req, res) {
+    var quizId = req.body.quizId;  
+    var user = req.body.user;
+
+    console.log(quizId);
+    console.log(quizzes);
+    if((quizId in quizzes)){
+      res.send(quizzes[quizId]);
+    } else {
+      res.send(false);
+    }
+
+  });
+
+  /*
+    Watching for user joining quiz
+   */
+  router.post('/quiz/join/', function (req, res) {
     var quizId = req.body.quizId;  
     var user = req.body.user;
 
     _this.addPlayerToQuiz(quizId, user);
 
-    res.send('success');
+    res.end('success');
+  });
+
+  /* 
+    Watching for answers submitted by users
+  */
+  router.post('/quiz/submit/', function (req, res) {
+    var answers = req.body.answers;
+    var quizId = req.body.quizId;  
+    var userId = req.body.userId;
+
+    quizzes[quizId]['answers'][userId] = answers;
+    _this.writeAnswersToDB(userId, quizId, answers);
+
+    res.end('success');
   });
 
 } 

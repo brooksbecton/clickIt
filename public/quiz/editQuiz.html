@@ -1,0 +1,52 @@
+<h1>Edit a Quiz</h1>
+<form name="editQuizForm">
+    <md-input-container class="md-block" flex-gt-sm="" required>
+        <label>Quiz Id</label>
+        <input ng-model="quizId" type="text">
+    </md-input-container>
+    <md-button aria-label="Edit" class="md-raised" ng-click="editQuizDriver(quizId)"> Edit </md-button>
+
+    <div ng-show="editQuizForm.$dirty">
+        <md-input-container class="md-block" flex-gt-sm="" required>
+            <label>Instructor Name</label>
+            <input type="text" ng-value="quiz.instructor">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm="" required>
+            <label>Quiz Name</label>
+            <input type="text" ng-value="quiz.quizName">
+        </md-input-container>
+        <md-input-container class="md-block" flex-gt-sm="" required>
+            <label>Project Type</label>
+            <md-select name="type" ng-model="quiz.quizType" required >
+                <md-option value="multiChoice">Multi-Choice</md-option>
+                <!-- TODO: Add back in disabled attributes to bottom two options -->
+                <md-option value="fillInTheBlank">Fill in the Blank</md-option>
+                <md-option value="freeResponse">Free Response</md-option>
+            </md-select>
+        </md-input-container>
+        <md-switch ng-model="quiz.open" aria-label="Public">
+            Public
+        </md-switch>
+
+        <!-- Multiple Choice Quiz Option-->
+        <div ng-show="quiz.quizType == 'multiChoice'">
+            <legend><h3>Questions</h3></legend>
+            <div ng-repeat="question in quiz.questions track by $index">
+                <md-input-container class="md-block" flex-gt-sm="" required>
+                    <label>Question: {{$index+1}}</label>
+                    <input type="text" ng-value="question.question">
+                </md-input-container>
+                <div ng-repeat="answers in question.answers track by $index">
+                    <md-input-container class="md-block" flex-gt-sm="" required>
+                        <label> {{multiChoiceLetters[$index]}}</label>
+                        <input type="text" ng-value="answers">
+                    </md-input-container >
+                </div>
+            </div>
+
+            <md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>
+        </div>
+    </div>
+</form>
+{{quiz}}
+quizType: {{quiz.type}}

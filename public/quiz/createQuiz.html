@@ -1,4 +1,5 @@
 <h1>Create a Quiz</h1>
+<form>
 <md-input-container class="md-block" flex-gt-sm="" required>
     <label>Instructor Name</label>
     <input >
@@ -16,8 +17,11 @@
         <md-option value="freeResponse">Free Response</md-option>
     </md-select>
 </md-input-container>
+<md-switch ng-model="data.cb1" aria-label="Public">
+Public
+</md-switch>
 
-<!-- Case where user is trying to make a multiple choice quiz-->
+<!-- Multiple Choice Quiz Option-->
 <div ng-show="quizType == 'multiChoice'">
     <legend><h3>Create Questions</h3></legend>
     <md-input-container class="md-block" flex-gt-sm="" required>
@@ -31,3 +35,4 @@
 </div>
 
 <md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>
+</form>
