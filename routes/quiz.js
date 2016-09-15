@@ -96,24 +96,31 @@ function Quizzer(){
     }
   }
 
-  this.writeAnswersToDB = function(userId, quizId, answers){
-    firebase.database().ref('quizzes/' + quizId + /answers/ + userId + '/').set({
+  this.writeAnswersToDB = function(ownerId, userId, quizId, answers){
+    firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + /answers/ + userId + '/').set({
         answers
       });
   }
 
-  this.writeUserToDB = function(quizId, user){
-    firebase.database().ref('quizzes/' + quizId + /users/ + user['uid']).set({
+  this.writeUserToDB = function(ownerId, quizId, user){
+    firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + /users/ + user['uid']).set({
       user
     });
   }
 
-  this.writeQuizToDB = function(id, quiz){
-    firebase.database().ref('quizzes/' + id).set({
+  this.writeQuizToDB = function(ownerId, quizId, quiz){
+    firebase.database().ref('Users/' + ownerId + /quizzes/ +  quizId).set({
       quiz: quiz
     });
   }
 
+  
+  this.openQuiz = function(quizId, ownerId, open){
+    firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + '/').set({
+        open: open
+      });
+
+  }
   /* 
       Any request made to the quiz module will be sent the index.
       The index has AngularJS which is handling the routing. 
@@ -158,6 +165,7 @@ function Quizzer(){
     Watching for user joining quiz
    */
   router.post('/quiz/join/', function (req, res) {
+
     var quizId = req.body.quizId;  
     var user = req.body.user;
 
@@ -180,6 +188,25 @@ function Quizzer(){
     res.end('success');
   });
 
+  router.post('/quiz/start/', function (req, res) {
+    var quizId = req.body.quizId;
+    var userId = req.body.userId;
+    var open = req.body.open;
+
+    _this.openQuiz(quizId, userId, open);
+
+    res.send('success');
+  });
+
+  router.post('/quiz/close/', function (req, res) {
+    var quizId = req.body.quizId;
+    var userId = req.body.userId;
+    var open = req.body.open;
+
+    _this.openQuiz(quizId, userId, open);
+
+    res.send('success');
+  });
 } 
 
 firebase.initializeApp({
@@ -188,7 +215,7 @@ firebase.initializeApp({
 });
 
 function demoAddingUserToDB(quizMaster){
-  var player =  {'id': '625344652434','name': 'bobb', 'score': 25};
+  var player =  {'uid': '625344652434','name': 'bobb', 'score': 25};
   var id = 'SkKXjqb3';
 
   quizMaster.writeUserToDB(id, player)
@@ -199,7 +226,7 @@ function demoInitQuiz(quizMaster){
 }
 
 var quizMaster = new Quizzer;
-// demoAddingUserToDB(quizMaster);
+demoAddingUserToDB(quizMaster);
 demoInitQuiz(quizMaster);
 
 module.exports = router;
