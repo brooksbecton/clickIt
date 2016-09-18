@@ -19,13 +19,13 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
 
   $scope.editQuizDriver = function(quizId){
     if($scope.userSignedIn()){
-      $scope.getQuiz();
+      $scope.getQuiz(quizId);
     } else {
     }
   }
 
-  $scope.getQuiz = function(userId){
-    var data = {"quizId": $scope.quizId, "userId": $scope.user.uid }
+  $scope.getQuiz = function(quizId){
+    var data = {"quizId": quizId, "userId": $scope.user.uid }
 
     $http({
       async: true,
@@ -172,11 +172,5 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         return false;
       }
   }
-
-  //Listening for route change success
-  $rootScope.$on("$routeChangeSuccess", function (currentRoute, previousRoute) {
-    //Change page title, based on Route information
-    $rootScope.title = $route.current.title;
-  });
 
 })

@@ -1,6 +1,18 @@
-    
+  
+  i{
+    cursor: pointer;
+  }
+
+  i:focus{
+    outline: -webkit-focus-ring-color  0px;  
+  }
+
   .top-nav{
     background-color: white;  
+  }
+
+  .main-content{
+    padding: 15px;
   }
       
     .main-logo, h1, h2, h3, h4, h5, h6{
@@ -26,9 +38,23 @@
       float: right;
       font-family: 'Oswald', sans-serif;
       position: absolute;
-      right: 10px;
-      top: 10px;
+      right: 5px;
+      top: 5px;
 
+    }
+
+    .side-nav-button{
+      font-family: 'Oswald', sans-serif;
+      position: absolute;
+      left: 20px;
+      top: 20px;
+    }
+
+    @media only screen and (max-width: 960px) {
+      .left-side-nav{
+        width: 50vw;
+        min-width: 280px
+      }
     }
 /*
 Copyright 2016 Google Inc. All Rights Reserved. 
