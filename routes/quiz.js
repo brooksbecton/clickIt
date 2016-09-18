@@ -1,4 +1,5 @@
 var express = require('express');
+var cookieParser = require('cookie-parser');
 var firebase = require("firebase");
 var shortid = require('shortid');
 var path = require('path');
@@ -15,7 +16,7 @@ function Quizzer(){
 
     if(_this.quizExists(quizId)){
       quizzes[quizId]['users'].push(user);
-      _this.writeUserToDB(quizId, user);
+      _this.writeUserOnQuizToDB(quizId, user);
     }
     else{
     }
@@ -37,7 +38,7 @@ function Quizzer(){
     return shortid.generate();
   }
 
-  this.initQuiz = function(qInstructor, qName, qType, qWhiteList){
+  this.initQuiz = function(qOwner, qInstructor, qName, qType, qWhiteList){
     var newQuiz = new multiChoiceQuiz();
     var quizId = generateId();
 
@@ -48,8 +49,9 @@ function Quizzer(){
     newQuiz['whiteList'] = qWhiteList;
    
     quizzes[quizId] = newQuiz;
-    console.log(quizId);
-    _this.writeQuizToDB(quizId, newQuiz);
+
+    _this.writeQuizToDB(qOwner['uid'], newQuiz);
+    return newQuiz;
   };
 
   var multiChoiceQuiz = function(){
@@ -97,29 +99,27 @@ function Quizzer(){
   }
 
   this.writeAnswersToDB = function(ownerId, userId, quizId, answers){
-    firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + /answers/ + userId + '/').set({
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
         answers
       });
   }
 
-  this.writeUserToDB = function(ownerId, quizId, user){
+  this.writeUserOnQuizToDB = function(ownerId, quizId, user){
     firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + /users/ + user['uid']).set({
       user
     });
   }
 
-  this.writeQuizToDB = function(ownerId, quizId, quiz){
-    firebase.database().ref('Users/' + ownerId + /quizzes/ +  quizId).set({
+  this.writeQuizToDB = function(ownerId, quiz){
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" +  quiz['id'] + '/').set({
       quiz: quiz
     });
   }
 
-  
   this.openQuiz = function(quizId, ownerId, open){
-    firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + '/').set({
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + '/quiz').update({
         open: open
       });
-
   }
   /* 
       Any request made to the quiz module will be sent the index.
@@ -149,15 +149,13 @@ function Quizzer(){
    */
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;  
-    var user = req.body.user;
+    var userId = req.body.userId;
 
-    console.log(quizId);
-    console.log(quizzes);
-    if((quizId in quizzes)){
-      res.send(quizzes[quizId]);
-    } else {
-      res.send(false);
-    }
+    var userQuizRef = firebase.database().ref('Users/' + userId + '/quizzes/' + quizId + "/quiz/");
+
+    userQuizRef.on('value', function(snapshot) {
+      res.send(snapshot.val());
+    });
 
   });
 
@@ -214,19 +212,23 @@ firebase.initializeApp({
   databaseURL: "https://clickit-5cb47.firebaseio.com",
 });
 
-function demoAddingUserToDB(quizMaster){
-  var player =  {'uid': '625344652434','name': 'bobb', 'score': 25};
-  var id = 'SkKXjqb3';
 
-  quizMaster.writeUserToDB(id, player)
+
+function demoAddingUserToDB(user, quizMaster){
+  quizMaster.writeUserOnQuizToDB(user)
 }
 
 function demoInitQuiz(quizMaster){
-  quizMaster.initQuiz('Dr. Oc', 'How to beat spiderman', 'multiChoice', ['broabect@ut.utm.edu', 'codethom@ut.utm.edu']);
+  var quiz = quizMaster.initQuiz(user, 'Dr. Oc', 'How to beat spiderman', 'multiChoice', ['broabect@ut.utm.edu', 'codethom@ut.utm.edu']);
+  quizMaster.openQuiz(quiz['id'], user['uid'], true);
 }
 
 var quizMaster = new Quizzer;
-demoAddingUserToDB(quizMaster);
+
+var user = {'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'provider': 'google'};
+
+
+// demoAddingUserToDB(user, quizMaster);
 demoInitQuiz(quizMaster);
 
 module.exports = router;

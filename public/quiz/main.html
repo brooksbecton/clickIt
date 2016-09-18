@@ -18,8 +18,8 @@
         <md-nav-item md-nav-click="goto('page2')" name="Quiz">Quiz</md-nav-item>
         <md-nav-item md-nav-click="goto('page3')" name="Contact">Contact</md-nav-item>
       </md-nav-bar>
-      <md-button class="sign-in-button md-raised md-primary" ng-click="googleSignIn()">Sign In </md-button>
-      <!--<md-button class="md-raised" ng-hide="userSignedIn()">Bueno</md-button>-->
+      <md-button class="sign-in-button md-raised md-accent" ng-click="googleSignIn()" ng-hide="userSignedIn()">Sign In </md-button>
+      <md-button class="sign-in-button md-raised md-primary" ng-show="userSignedIn()">Sign Out</md-button>
     </div>
   </div>
   <div layout="row">

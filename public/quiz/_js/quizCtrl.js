@@ -13,18 +13,10 @@ var provider = new firebase.auth.GoogleAuthProvider();
 angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $location, $rootScope, $route) {
 
   $scope.quiz = {};
-
-  // $scope.quiz = {
-  //   "id": '123',
-  //   "questions": {
-  //     "laksjdmasdbf,mnabsd": { "text": "What color is the sky?", "answers": ["Blue", "Recursion", "Green", "Red"], "correctAnswers": 0 },
-  //     "m,absdfuicvnbakjsdv": { "text": "If a chicken had lips, would it whistle?", "answers": ["Yes", "No", "Singe Source of Truth Design", "Open/Close Principle"], "correctAnswers": 1 }
-  //   },
-  //   "quizName": "CSCI Final Exam",
-  // };
   $scope.errors = {};
   $scope.quizAnswers = initAnswers($scope.quiz);
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+
   $scope.editQuizDriver = function(quizId){
     if($scope.userSignedIn()){
       $scope.getQuiz();
@@ -52,20 +44,20 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   }
 
   $scope.googleSignIn = function () {
-    firebase.auth().signInWithPopup(provider).then(function (result) {
-      // This gives you a Google Access Token. You can use it to access the Google API.
-      $scope.googleToken = result.credential.accessToken;
-      // The signed-in user info.
-      $scope.user = result.user;
-      console.log(result.user);
-    }).catch(function (error) {
-      // Handle Errors here.
-      var errorCode = error.code;
-      var errorMessage = error.message;
-      // The email of the user's account used.
-      var email = error.email;
-      var credential = error.credential;
-    });
+      firebase.auth().signInWithPopup(provider).then(function (result) {
+        // This gives you a Google Access Token. You can use it to access the Google API.
+        $scope.googleToken = result.credential.accessToken;
+        // The signed-in user info.
+        $scope.user = result.user;
+        $scope.$apply();
+      }).catch(function (error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        var credential = error.credential;
+      });
   }
 
   $scope.joinQuiz = function(quizId){
@@ -132,7 +124,29 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   /*
     Sends answer object to back end for saving. 
   */
-  $scope.submitQuiz = function (quizId) {
+  $scope.submitQuizAnswers = function (quizId) {
+    if($scope.userSignedIn()){
+      var data = { "answers": $scope.quizAnswers, 'quizId': quizId, "userId": $scope.user.uid }
+
+      $http({
+        data,
+        method: 'POST',
+        url: 'quiz/submit/'
+      }).then(function success(response) {
+
+      }, function error(response) {
+        var errorKey = 'submitQuiz';
+        $scope.errors[errorKey] = response.statusText;
+      });
+    } else{
+      redirectToErrorPage();
+    }
+  }
+
+  /*
+    Sends answer object to back end for saving. 
+  */
+  $scope.submitQuizEdits = function (quizId) {
     if($scope.userSignedIn()){
       var data = { "answers": $scope.quizAnswers, 'quizId': quizId, "userId": $scope.user.uid }
 
