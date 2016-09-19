@@ -15,7 +15,6 @@ function Quizzer(){
   this.addPlayerToQuiz = function(quizId, user){
 
     if(_this.quizExists(quizId)){
-      quizzes[quizId]['users'].push(user);
       _this.writeUserOnQuizToDB(quizId, user);
     }
     else{
@@ -98,6 +97,14 @@ function Quizzer(){
     }
   }
 
+  this.getOwnerIdFromDB = function(quizId){
+    var userQuizRef = firebase.database().ref('Quizzes/' + quizId);
+
+    userQuizRef.on('value', function(snapshot) {
+      return snapshot.val();
+    });
+  }
+
   this.writeAnswersToDB = function(ownerId, userId, quizId, answers){
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
         answers
@@ -111,8 +118,13 @@ function Quizzer(){
   }
 
   this.writeQuizToDB = function(ownerId, quiz){
+    //Writing to Users Tree
     firebase.database().ref('Users/' + ownerId + "/quizzes/" +  quiz['id'] + '/').set({
       quiz: quiz
+    });
+    //Writing to Quizzes Composite Tree
+    firebase.database().ref('Quizzes/' + quiz['id']).set({
+      ownerId
     });
   }
 
@@ -167,9 +179,11 @@ function Quizzer(){
     var quizId = req.body.quizId;  
     var user = req.body.user;
 
-    _this.addPlayerToQuiz(quizId, user);
 
-    res.end('success');
+    var ownerId = _this.getOwnerIdFromDB(quizId);
+    _this.addPlayerToQuiz(ownerId, quizId, user);
+
+    res.send('success');
   });
 
   /* 

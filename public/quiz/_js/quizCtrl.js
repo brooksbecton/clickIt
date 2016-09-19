@@ -17,15 +17,15 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   $scope.quizAnswers = initAnswers($scope.quiz);
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
 
-  $scope.editQuizDriver = function(quizId){
-    if($scope.userSignedIn()){
+  $scope.editQuizDriver = function (quizId) {
+    if ($scope.userSignedIn()) {
       $scope.getQuiz(quizId);
     } else {
     }
   }
 
-  $scope.getQuiz = function(quizId){
-    var data = {"quizId": quizId, "userId": $scope.user.uid }
+  $scope.getQuiz = function (quizId) {
+    var data = { "quizId": quizId, "userId": $scope.user.uid }
 
     $http({
       async: true,
@@ -40,29 +40,29 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
       $scope.errors[errorKey] = response.statusText;
       return undefined;
     });
-  
+
   }
 
   $scope.googleSignIn = function () {
-      firebase.auth().signInWithPopup(provider).then(function (result) {
-        // This gives you a Google Access Token. You can use it to access the Google API.
-        $scope.googleToken = result.credential.accessToken;
-        // The signed-in user info.
-        $scope.user = result.user;
-        $scope.$apply();
-      }).catch(function (error) {
-        // Handle Errors here.
-        var errorCode = error.code;
-        var errorMessage = error.message;
-        // The email of the user's account used.
-        var email = error.email;
-        var credential = error.credential;
-      });
+    firebase.auth().signInWithPopup(provider).then(function (result) {
+      // This gives you a Google Access Token. You can use it to access the Google API.
+      $scope.googleToken = result.credential.accessToken;
+      // The signed-in user info.
+      $scope.user = result.user;
+      $scope.$apply();
+    }).catch(function (error) {
+      // Handle Errors here.
+      var errorCode = error.code;
+      var errorMessage = error.message;
+      // The email of the user's account used.
+      var email = error.email;
+      var credential = error.credential;
+    });
   }
 
-  $scope.joinQuiz = function(quizId){
-    if($scope.user){
-      var data = {'quizId': quizId, "user": $scope.user}
+  $scope.joinQuiz = function (quizId) {
+    if ($scope.userSignedIn) {
+      var data = { 'quizId': quizId, "user": $scope.user }
 
       $http({
         data,
@@ -97,9 +97,9 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   /*
     Factory that takes in a page to take a user to and redirects them there
    */
-  function redirectToErrorPage(destination, errorMsg){
+  function redirectToErrorPage(destination, errorMsg) {
     console.log("destination" + destination);
-    console.log("errorMsg: " + errorMsg );
+    console.log("errorMsg: " + errorMsg);
     console.log("yeah it be great if someone implemented this function, thanks");
   }
 
@@ -125,7 +125,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     Sends answer object to back end for saving. 
   */
   $scope.submitQuizAnswers = function (quizId) {
-    if($scope.userSignedIn()){
+    if ($scope.userSignedIn()) {
       var data = { "answers": $scope.quizAnswers, 'quizId': quizId, "userId": $scope.user.uid }
 
       $http({
@@ -138,7 +138,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
       });
-    } else{
+    } else {
       redirectToErrorPage();
     }
   }
@@ -147,7 +147,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     Sends answer object to back end for saving. 
   */
   $scope.submitQuizEdits = function (quizId) {
-    if($scope.userSignedIn()){
+    if ($scope.userSignedIn()) {
       var data = { "answers": $scope.quizAnswers, 'quizId': quizId, "userId": $scope.user.uid }
 
       $http({
@@ -160,17 +160,21 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
       });
-    } else{
+    } else {
       redirectToErrorPage();
     }
   }
 
   $scope.userSignedIn = function () {
-      if ($scope.user) {
-        return true;
-      } else {
-        return false;
-      }
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+      // User is signed in.
+      return true;
+    } else {
+      // No user is signed in.
+      return false;
+    }
   }
 
 })

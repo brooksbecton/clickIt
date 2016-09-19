@@ -20,7 +20,8 @@
         <md-nav-item md-nav-click="goto('page3')" name="Contact">Contact</md-nav-item>
       </md-nav-bar>
       <md-button class="sign-in-button md-raised md-accent" ng-click="googleSignIn()" ng-hide="userSignedIn()">Sign In </md-button>
-      <md-button class="sign-in-button md-raised md-primary" ng-show="userSignedIn()">Sign Out</md-button>
+      <md-button class="sign-in-button md-raised md-primary" ng-click="signUserOut()" ng-show="userSignedIn()">Sign Out</md-button>
+
       <div class="side-nav-button"><i class="material-icons " ng-click="toggleLeft('leftNav')" hide-gt-sm>menu</i></div>
     </div>
   </div>
