@@ -9,31 +9,32 @@ var router = express.Router();
 function Quizzer(){
 
   //Holds all instances of quizzes by Id
-  var quizzes = {};
+  this.quizzes = {};
   var _this = this;
 
-  this.addPlayerToQuiz = function(quizId, user){
+  this.__init__ = function(){
+    getQuizzesFromDB();
+  }
 
+  this.addPlayerToQuiz = function(ownerId, quizId, user){
     if(_this.quizExists(quizId)){
-      _this.writeUserOnQuizToDB(quizId, user);
+      console.log("tseasdf");
+      _this.writeUserOnQuizToDB(ownerId, quizId, user);
     }
     else{
     }
   }
 
   this.quizExists = function(id) {
-
-    if (id in quizzes) {
-      console.log("Quiz Exists");
-      return true;
-    
-    } else {
-      console.log("Quiz does not exist");
-      return false;
+    for(key in _this.quizzes){
+      if (id == key){
+        return true;
+      }
     }
+    return false;
   }
 
-  function generateId() {
+  function generateId(){
     return shortid.generate();
   }
 
@@ -47,7 +48,7 @@ function Quizzer(){
     newQuiz['type'] = qType;
     newQuiz['whiteList'] = qWhiteList;
    
-    quizzes[quizId] = newQuiz;
+    _this.quizzes[quizId] = newQuiz;
 
     _this.writeQuizToDB(qOwner['uid'], newQuiz);
     return newQuiz;
@@ -87,7 +88,7 @@ function Quizzer(){
   }
 
   this.userWhiteListed = function(quizId, user){
-    console.log(quizzes[id]);
+    console.log(_this.quizzes[id]);
     if(quizzes[id].whiteList.indexOf(user.email) >= 0){
       console.log("userWhiteListed!");
       return true;
@@ -97,12 +98,24 @@ function Quizzer(){
     }
   }
 
-  this.getOwnerIdFromDB = function(quizId){
-    var userQuizRef = firebase.database().ref('Quizzes/' + quizId);
+  function getQuizzesFromDB(){
+    var dbQuizzesRef = firebase.database().ref('Quizzes/');
+
+    dbQuizzesRef.on('value', function(snapshot) {
+      _this.quizzes = snapshot.val();
+    });
+  }
+
+  this.getOwnerIdFromQuizId = function(quizId){
+    var ownerId = "";
+
+    var userQuizRef = firebase.database().ref('Quizzes/' + quizId + "/");
 
     userQuizRef.on('value', function(snapshot) {
-      return snapshot.val();
+      ownerId = snapshot.val().ownerId;
     });
+
+    return ownerId
   }
 
   this.writeAnswersToDB = function(ownerId, userId, quizId, answers){
@@ -133,17 +146,19 @@ function Quizzer(){
         open: open
       });
   }
-  /* 
-      Any request made to the quiz module will be sent the index.
-      The index has AngularJS which is handling the routing. 
-  */
+
+
+
+  /**
+   * 
+   * 
+   * Routers
+   * 
+   * 
+   */
   router.get('/', function(req, res) {
     res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
   });
-
-  /*
-    Watching for user editing quiz
-   */
   router.get('/quiz/exists/', function (req, res) {
     var quizId = req.body.quizId;  
     var user = req.body.user;
@@ -155,10 +170,6 @@ function Quizzer(){
     }
 
   });
-
-  /*
-    Watching for user editing quiz
-   */
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;  
     var userId = req.body.userId;
@@ -170,25 +181,24 @@ function Quizzer(){
     });
 
   });
+  router.post('/quiz/close/', function (req, res) {
+    var quizId = req.body.quizId;
+    var userId = req.body.userId;
+    var open = req.body.open;
 
-  /*
-    Watching for user joining quiz
-   */
+    _this.openQuiz(quizId, userId, open);
+
+    res.send('success');
+  });
   router.post('/quiz/join/', function (req, res) {
-
-    var quizId = req.body.quizId;  
     var user = req.body.user;
+    var quizId = req.body.quizId;  
+    var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-
-    var ownerId = _this.getOwnerIdFromDB(quizId);
     _this.addPlayerToQuiz(ownerId, quizId, user);
 
     res.send('success');
   });
-
-  /* 
-    Watching for answers submitted by users
-  */
   router.post('/quiz/submit/', function (req, res) {
     var answers = req.body.answers;
     var quizId = req.body.quizId;  
@@ -199,18 +209,7 @@ function Quizzer(){
 
     res.end('success');
   });
-
   router.post('/quiz/start/', function (req, res) {
-    var quizId = req.body.quizId;
-    var userId = req.body.userId;
-    var open = req.body.open;
-
-    _this.openQuiz(quizId, userId, open);
-
-    res.send('success');
-  });
-
-  router.post('/quiz/close/', function (req, res) {
     var quizId = req.body.quizId;
     var userId = req.body.userId;
     var open = req.body.open;
@@ -231,18 +230,17 @@ firebase.initializeApp({
 function demoAddingUserToDB(user, quizMaster){
   quizMaster.writeUserOnQuizToDB(user)
 }
-
 function demoInitQuiz(quizMaster){
   var quiz = quizMaster.initQuiz(user, 'Dr. Oc', 'How to beat spiderman', 'multiChoice', ['broabect@ut.utm.edu', 'codethom@ut.utm.edu']);
   quizMaster.openQuiz(quiz['id'], user['uid'], true);
 }
-
 var quizMaster = new Quizzer;
 
 var user = {'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'provider': 'google'};
 
+quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
-demoInitQuiz(quizMaster);
+// demoInitQuiz(quizMaster);
 
 module.exports = router;

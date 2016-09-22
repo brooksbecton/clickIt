@@ -1,62 +1,59 @@
-  
-  i{
-    cursor: pointer;
+  i {
+      cursor: pointer;
   }
-
-  i:focus{
-    outline: -webkit-focus-ring-color  0px;  
+  i:focus {
+      outline: -webkit-focus-ring-color 0px;
   }
-
-  .top-nav{
-    background-color: white;  
+  .top-nav {
+      background-color: white;
   }
-
-  .main-content{
-    padding: 15px;
+  .main-content {
+      padding: 15px;
   }
-      
-    .main-logo, h1, h2, h3, h4, h5, h6{
+  .main-logo,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
       font-family: 'Oswald', sans-serif;
-    }
-
-    .main-logo{
+  }
+  .main-logo {
       font-size: 40px;
-    }
-
-    md-sidenav  {
+  }
+  md-sidenav {
       background-color: gainsboro;
       margin-right: 20px;
       max-width: 20%;
-      width: 20%;height: 100vh;
-    }
-
-    md-content {
-      padding:20px;
-    }
-    
-    .sign-in-button{
+      width: 20%;
+  }
+  .main-container{
+      height: 100%;
+  }
+  .main-right {
+      padding: 20px;
+  }
+  .sign-in-button {
       float: right;
       font-family: 'Oswald', sans-serif;
       position: absolute;
       right: 5px;
       top: 5px;
-
-    }
-
-    .side-nav-button{
+  }
+  .side-nav-button {
       font-family: 'Oswald', sans-serif;
       position: absolute;
       left: 20px;
       top: 20px;
-    }
-
-    @media only screen and (max-width: 960px) {
-      .left-side-nav{
-        width: 50vw;
-        min-width: 280px
+  }
+  @media only screen and (max-width: 960px) {
+      .left-side-nav {
+          width: 50vw;
+          min-width: 280px
       }
-    }
-/*
+  }
+  /*
 Copyright 2016 Google Inc. All Rights Reserved. 
 Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
 */

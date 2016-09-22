@@ -15,7 +15,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   $scope.quiz = {};
   $scope.errors = {};
   $scope.quizAnswers = initAnswers($scope.quiz);
-  $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G'];
+  $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
   $scope.editQuizDriver = function (quizId) {
     if ($scope.userSignedIn()) {
@@ -62,6 +62,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
 
   $scope.joinQuiz = function (quizId) {
     if ($scope.userSignedIn) {
+      console.log($scope.user);
       var data = { 'quizId': quizId, "user": $scope.user }
 
       $http({

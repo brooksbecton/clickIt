@@ -25,7 +25,7 @@
       <div class="side-nav-button"><i class="material-icons " ng-click="toggleLeft('leftNav')" hide-gt-sm>menu</i></div>
     </div>
   </div>
-  <div layout="row">
+  <div class="main-container" layout="row">
     <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="leftNav" md-whiteframe="4">
       <md-toolbar>
         <h1 class="md-toolbar-tools">Quiz</h1>
@@ -37,7 +37,7 @@
       <md-button ng-click="LeftNavClose('leftNav')" href="#take">Take (remove)</md-button>
     </md-sidenav>
 
-      <ng-view class="main-content" flex></ng-view>
+      <ng-view class="main-right" flex></ng-view>
   </div>
 </body>
 
@@ -68,11 +68,13 @@
       .config(function($mdThemingProvider) {
         $mdThemingProvider.theme('default')
           .primaryPalette('light-blue')
-          .accentPalette('orange');
+          .accentPalette('orange')
+          .warnPalette('red');
         });
 </script>
 
 <script src="/public/quiz/_js/routes.js"></script>
+<script src="/public/quiz/_js/createQuizCtrl.js"></script>
 <script src="/public/quiz/_js/quizCtrl.js"></script>
 <script src="/public/quiz/_js/leftNavCtrl.js"></script>
 

@@ -1,5 +1,5 @@
 <h1>Create a Quiz</h1>
-<form>
+<form name="createQuiz" ng-controller="createQuizCtrl as createCtrl">
 <md-input-container class="md-block" flex-gt-sm="" required>
     <label>Instructor Name</label>
     <input >
@@ -8,6 +8,9 @@
     <label>Quiz Name</label>
     <input type="text">
 </md-input-container>
+<md-switch ng-model="data.cb1" aria-label="Public">
+Public
+</md-switch>
 <md-input-container class="md-block" flex-gt-sm="" required>
     <label>Project Type</label>
     <md-select name="type" ng-model="quizType" required>
@@ -17,26 +20,34 @@
         <md-option value="freeResponse">Free Response</md-option>
     </md-select>
 </md-input-container>
-<md-switch ng-model="data.cb1" aria-label="Public">
-Public
-</md-switch>
+
 
 <!-- Multiple Choice Quiz Option-->
 <div ng-show="quizType == 'multiChoice'">
     <legend><h3>Create Questions</h3></legend>
     <md-input-container class="md-block" flex-gt-sm="" required>
         <label>Number of Questions</label>
-        <input type="number">
-    </md-input-container>
-    <md-input-container class="md-block" flex-gt-sm="" required>
-        <label>Question Text</label>
-        <input type="text">
-    </md-input-container>
-    <md-input-container class="md-block" flex-gt-sm="" required>
-        <label>Answer</label>
-        <input type="text">
-    </md-input-container >
-</div>
+        <input ng-model="newQuestionsCount" type="number" min="0" max="100" name="newQuestionsAmmount" value="1">
+        <p class="md-warn" ng-show="createQuiz.newQuestionsAmmount.$error.max">
+            <em>The max number of questions is 100</em>
+        </p>
+        <p class="md-warn" ng-show="createQuiz.newQuestionsAmmount.$error.min">
+            <em>The minimum number of questions is 1</em>
+        </p>
+    </md-input-container>  
 
+    <div ng-repeat="question in createCtrl.intToArray(newQuestionsCount) track by $index" layout="row">
+        <md-input-container class="md-block" flex="66" required>
+            <label>Question</label>
+            <input ng-bind="'question-' + $index" type="text">
+        </md-input-container>
+        <md-input-container class="md-block" flex="34" required>
+            <label>Number of Answers</label>
+            <input ng-model="createCtrl.newQuiz.qAnswer$index" type="number" min="1" max="10">
+        </md-input-container>
+        <div ng-repeat="answer in question">
+        </div>
+    </div>
+</div>
 <md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>
 </form>
