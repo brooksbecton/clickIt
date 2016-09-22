@@ -221,7 +221,7 @@ function Quizzer(){
 } 
 
 firebase.initializeApp({
-  serviceAccount: "private/clickIt-97f9d21e813e.json",
+  serviceAccount: "private/clickIt.json",
   databaseURL: "https://clickit-5cb47.firebaseio.com",
 });
 
