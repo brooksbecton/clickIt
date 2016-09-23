@@ -2,10 +2,10 @@
 
 <head>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link href="https://fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
+  <link href="//fonts.googleapis.com/css?family=Oswald" rel="stylesheet">
   <!-- Angular Material style sheet -->
-  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+  <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="/public/stylesheets/quiz.css">
   <title ng-bind="$root.title + ' | Click It Quiz'">{{title}}</title>
 </head>
@@ -26,7 +26,8 @@
     </div>
   </div>
   <div class="main-container" layout="row">
-    <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="leftNav" md-whiteframe="4">
+    <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="leftNav"
+      md-whiteframe="4">
       <md-toolbar>
         <h1 class="md-toolbar-tools">Quiz</h1>
       </md-toolbar>
@@ -34,10 +35,9 @@
       <md-button ng-click="LeftNavClose('leftNav')" href="#join">Join</md-button>
       <md-button ng-click="LeftNavClose('leftNav')" href="#create">Create</md-button>
       <md-button ng-click="LeftNavClose('leftNav')" href="#edit">Edit</md-button>
-      <md-button ng-click="LeftNavClose('leftNav')" href="#take">Take (remove)</md-button>
     </md-sidenav>
 
-      <ng-view class="main-right" flex></ng-view>
+    <ng-view class="main-right" flex></ng-view>
   </div>
 </body>
 
@@ -50,28 +50,28 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
 
 <!-- Angular Material Library -->
-<script src="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
 
 <!-- Firebase -->
-<script src="https://www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
+<script src="//www.gstatic.com/firebasejs/3.3.0/firebase.js"></script>
 
 <!-- AngularFire -->
-<script src="https://cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
+<script src="//cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
 
 <script>
 
-</script>
+  </script>
 
 
 <script type="text/javascript">   
-    angular.module("quizModule", ['ngRoute', 'ngMaterial'])
-      .config(function($mdThemingProvider) {
-        $mdThemingProvider.theme('default')
-          .primaryPalette('light-blue')
-          .accentPalette('orange')
-          .warnPalette('red');
-        });
-</script>
+      angular.module("quizModule", ['ngRoute', 'ngMaterial'])
+        .config(function($mdThemingProvider) {
+          $mdThemingProvider.theme('default')
+            .primaryPalette('light-blue')
+            .accentPalette('orange')
+            .warnPalette('red');
+          });
+  </script>
 
 <script src="/public/quiz/_js/routes.js"></script>
 <script src="/public/quiz/_js/createQuizCtrl.js"></script>

@@ -12,10 +12,12 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
 angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $location, $rootScope, $route) {
 
-  $scope.quiz = {};
   $scope.errors = {};
-  $scope.quizAnswers = initAnswers($scope.quiz);
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
+
+  $scope.changeView = function(view){
+    $location.path(view);
+  }
 
   $scope.editQuizDriver = function (quizId) {
     if ($scope.userSignedIn()) {
@@ -25,16 +27,17 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   }
 
   $scope.getQuiz = function (quizId) {
-    var data = { "quizId": quizId, "userId": $scope.user.uid }
+    var data = { "quizId": quizId};
 
     $http({
-      async: true,
       data,
       method: 'POST',
       url: 'quiz/get/'
     }).then(function success(response) {
-      $scope.quiz = response.data;
-      return response.data;
+
+        var quiz = response.data;
+        $scope.quizAnswers = initAnswers(quiz);
+        $scope.quiz = quiz;
     }, function error(response) {
       var errorKey = 'submitQuiz';
       $scope.errors[errorKey] = response.statusText;
@@ -70,6 +73,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         method: 'POST',
         url: 'quiz/join/'
       }).then(function success(response) {
+        $scope.getQuiz(quizId);
       }, function error(response) {
         var errorKey = 'joinQuiz';
         $scope.errors[errorKey] = response.statusText;
@@ -88,7 +92,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   function initAnswers(quiz) {
     var newAnswers = {};
 
-    for (key in $scope.quiz['questions']) {
+    for (key in quiz['questions']) {
       newAnswers[key] = "";
     }
 
@@ -120,6 +124,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
       var errorKey = 'signUserOut';
       $scope.errors[errorKey] = error;
     });
+    $scope.user = undefined;
   }
 
   /*
@@ -170,7 +175,10 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     var user = firebase.auth().currentUser;
 
     if (user) {
-      // User is signed in.
+      if ($scope.user == undefined){
+         $scope.user = user; 
+         $scope.$apply;
+        }
       return true;
     } else {
       // No user is signed in.

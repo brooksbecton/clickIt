@@ -8,8 +8,6 @@ var router = express.Router();
 
 function Quizzer(){
 
-  //Holds all instances of quizzes by Id
-  this.quizzes = {};
   var _this = this;
 
   this.__init__ = function(){
@@ -18,7 +16,6 @@ function Quizzer(){
 
   this.addPlayerToQuiz = function(ownerId, quizId, user){
     if(_this.quizExists(quizId)){
-      console.log("tseasdf");
       _this.writeUserOnQuizToDB(ownerId, quizId, user);
     }
     else{
@@ -48,8 +45,6 @@ function Quizzer(){
     newQuiz['type'] = qType;
     newQuiz['whiteList'] = qWhiteList;
    
-    _this.quizzes[quizId] = newQuiz;
-
     _this.writeQuizToDB(qOwner['uid'], newQuiz);
     return newQuiz;
   };
@@ -172,9 +167,9 @@ function Quizzer(){
   });
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;  
-    var userId = req.body.userId;
+    var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-    var userQuizRef = firebase.database().ref('Users/' + userId + '/quizzes/' + quizId + "/quiz/");
+    var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + "/quiz/");
 
     userQuizRef.on('value', function(snapshot) {
       res.send(snapshot.val());
@@ -203,9 +198,9 @@ function Quizzer(){
     var answers = req.body.answers;
     var quizId = req.body.quizId;  
     var userId = req.body.userId;
+    var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-    quizzes[quizId]['answers'][userId] = answers;
-    _this.writeAnswersToDB(userId, quizId, answers);
+    _this.writeAnswersToDB(ownerId, userId, quizId, answers);
 
     res.end('success');
   });

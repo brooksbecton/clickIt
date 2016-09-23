@@ -11,8 +11,8 @@ angular.module("quizModule").config(function ($routeProvider) {
             controller: 'quizCtrl'
         })
         .when("/join", {
-            templateUrl: '/public/quiz/joinQuiz.html',
-            title: "Join",
+            templateUrl: '/public/quiz/takeQuiz.html',
+            title: "Take",
             controller: 'quizCtrl'
         })
         .when("/take", {
