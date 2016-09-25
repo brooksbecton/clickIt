@@ -5,6 +5,11 @@ angular.module("quizModule").config(function ($routeProvider) {
             title: "Edit",
             controller: 'quizCtrl'
         })
+        .when("/contactUs", {
+            templateUrl: '/public/quiz/contactUs.html',
+            title: "Contact Us",
+            controller: 'quizCtrl'
+        })
         .when("/create", {
             templateUrl: '/public/quiz/createQuiz.html',
             title: "Create",

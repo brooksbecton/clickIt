@@ -1,14 +1,17 @@
 angular.module("quizModule").controller('leftNavCtrl', function ($http, $mdSidenav, $route, $rootScope, $scope) {
 
-    $scope.toggleLeft = leftNavToggler('leftNav');
+    var _this = this;
 
+    this.t = true;
+
+    this.toggleLeft = leftNavToggler('leftNav');
 
     function leftNavToggler(componentId) {
         return function () {
             $mdSidenav(componentId).toggle();
         }
     }
-    $scope.LeftNavClose = function(componentId) {
+    this.LeftNavClose = function(componentId) {
         return $mdSidenav(componentId).close();
     }
 
@@ -16,7 +19,8 @@ angular.module("quizModule").controller('leftNavCtrl', function ($http, $mdSiden
   $rootScope.$on("$routeChangeSuccess", function (currentRoute, previousRoute) {
     //Change page title, based on Route information
     $rootScope.title = $route.current.title;
-    $scope.LeftNavClose('leftNav');
+    _this.currentPage= $route.current.title;
+    _this.LeftNavClose('leftNav');
 
   });
 
