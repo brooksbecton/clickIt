@@ -15,11 +15,7 @@ function Quizzer(){
   }
 
   this.addPlayerToQuiz = function(ownerId, quizId, user){
-    if(_this.quizExists(quizId)){
       _this.writeUserOnQuizToDB(ownerId, quizId, user);
-    }
-    else{
-    }
   }
 
   this.quizExists = function(id) {
@@ -37,9 +33,7 @@ function Quizzer(){
 
   this.initQuiz = function(qOwner, qInstructor, qName, qType, qWhiteList){
     var newQuiz = new multiChoiceQuiz();
-    // var quizId = generateId();
-    var quizId = "fatCat";
-
+    var quizId = generateId();
     newQuiz['id'] = quizId;
     newQuiz['instructor'] = qInstructor;
     newQuiz['quizName'] = qName;
@@ -155,27 +149,20 @@ function Quizzer(){
   router.get('/', function(req, res) {
     res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
   });
-  router.get('/quiz/exists/', function (req, res) {
-    var quizId = req.body.quizId;  
-    var user = req.body.user;
-
-    if(_this.quizExists()){
-      res.send(true);
-    } else {
-      res.send(false);
-    }
-
-  });
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;  
-    var ownerId = _this.getOwnerIdFromQuizId(quizId);
+    if(_this.quizExists(quizId)){
+      var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-    var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + "/quiz/");
+      var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + "/quiz/");
 
-    userQuizRef.on('value', function(snapshot) {
-      res.send(snapshot.val());
-    });
-
+      userQuizRef.on('value', function(snapshot) {
+        res.send(snapshot.val());
+      });
+    } else {
+      res.status(400);
+      res.send('fail');
+    }
   });
   router.post('/quiz/close/', function (req, res) {
     var quizId = req.body.quizId;
@@ -189,21 +176,31 @@ function Quizzer(){
   router.post('/quiz/join/', function (req, res) {
     var user = req.body.user;
     var quizId = req.body.quizId;  
-    var ownerId = _this.getOwnerIdFromQuizId(quizId);
+    if(_this.quizExists(quizId)){
+      var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-    _this.addPlayerToQuiz(ownerId, quizId, user);
+      _this.addPlayerToQuiz(ownerId, quizId, user);
 
-    res.send('success');
+      res.send('success');
+    } else {
+      res.status(400);
+      res.send('fail');
+    }
   });
   router.post('/quiz/submit/', function (req, res) {
     var answers = req.body.answers;
     var quizId = req.body.quizId;  
     var userId = req.body.userId;
-    var ownerId = _this.getOwnerIdFromQuizId(quizId);
+    if(_this.quizExists(quizId)){
+      var ownerId = _this.getOwnerIdFromQuizId(quizId);
 
-    _this.writeAnswersToDB(ownerId, userId, quizId, answers);
+      _this.writeAnswersToDB(ownerId, userId, quizId, answers);
 
-    res.end('success');
+      res.send('success');
+    } else {
+      res.status(400);
+      res.send('fail');
+    }
   });
   router.post('/quiz/start/', function (req, res) {
     var quizId = req.body.quizId;
@@ -237,6 +234,6 @@ var user = {'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'p
 quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
-demoInitQuiz(quizMaster);
+// demoInitQuiz(quizMaster);
 
 module.exports = router;

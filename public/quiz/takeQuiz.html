@@ -1,10 +1,10 @@
 <div ng-hide="quiz">
     <h1>Join a Quiz</h1>
-    <md-input-container class="md-block" flex-gt-sm="">
-        <label>Quiz ID</label>
-        <input ng-model="joinQuizId" type="text">
-    </md-input-container>
-    <md-button aria-label="Submit" class="md-primary md-raised" ng-click="joinQuiz(joinQuizId)"> Submit </md-button>
+        <md-input-container class="md-block" flex-gt-sm="">
+            <label>Quiz ID</label>
+            <input ng-model="joinQuizId" type="text">
+        </md-input-container>
+        <md-button type="submit" aria-label="Submit" class="md-primary md-raised" ng-click="joinQuiz(joinQuizId)"> Submit </md-button>
 </div>
 <div ng-show="quiz">
     <h1 ng-bind="quiz.quizName"></h1>
@@ -17,7 +17,7 @@
                 </md-radio-button>
             </md-radio-group>
         </div>
-        <md-button ng-click="submitQuizAnswers(quiz.id)" ng-hide="quizForm.$invalid" class="md-accent md-fab md-fab-bottom-right">
+        <md-button type="submit" ng-click="submitQuizAnswers(quiz.id)" ng-hide="quizForm.$invalid" class="md-accent md-fab md-fab-bottom-right">
             &#x2714;
         </md-button>
     </form>

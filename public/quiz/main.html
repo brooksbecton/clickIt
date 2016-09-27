@@ -11,7 +11,7 @@
 </head>
 
 <body ng-cloak ng-controller="leftNavCtrl as lNavCtrl">
-  <div class="md-primary top-nav" flex layout="column" layout-align="center center">
+  <div class="md-primary top-nav" flex layout="column" layout-align="center center" md-whiteframe="4">
     <div class="main-logo"><img src="/public/_imgs/klikitLogo.svg"></div>
     <div layout="row">
       <!--<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
@@ -27,7 +27,7 @@
   </div>
   <div class="main-container" layout="row">
 
-    <div class="flex-margin" flex=10 hide-sm hide-xs></div>
+    <div class="flex-margin" flex=5 hide-sm hide-xs></div>
 
     <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-xs')" md-component-id="leftNav">
       <md-toolbar>
@@ -40,19 +40,19 @@
       <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Edit'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
         href="#edit">Edit</md-button>
     </md-sidenav>
-    <md-content flex layout-padding >
-      <ng-view class="main-right" flex></ng-view>
-    </md-content>
+    <div flex class="main-right">
+      <ng-view  flex></ng-view>
+    </div>
     <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-md')" md-component-id="right" >
       <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">User Hub</h1>
       </md-toolbar>
     </md-sidenav>
 
-    <div class="flex-margin" flex=10 hide-sm hide-xs></div>
+    <div class="flex-margin" flex=5 hide-sm hide-xs></div>
 
   </div>
-  <footer>
+  <footer md-whiteframe="4">
       <div layout="row" layout-align="center center">
         <div flex=20></div>
         <div flex=20>

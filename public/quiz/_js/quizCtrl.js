@@ -41,7 +41,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     }, function error(response) {
       var errorKey = 'submitQuiz';
       $scope.errors[errorKey] = response.statusText;
-      return undefined;
+      redirectToErrorPage('400');
     });
 
   }
@@ -64,7 +64,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   }
 
   $scope.joinQuiz = function (quizId) {
-    if ($scope.userSignedIn) {
+    if ($scope.userSignedIn()) {
       console.log($scope.user);
       var data = { 'quizId': quizId, "user": $scope.user }
 
@@ -77,6 +77,9 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
       }, function error(response) {
         var errorKey = 'joinQuiz';
         $scope.errors[errorKey] = response.statusText;
+
+        redirectToErrorPage('400');
+
       });
     } else {
       console.log("User Not Logged In");
@@ -99,13 +102,8 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     return newAnswers;
   }
 
-  /*
-    Factory that takes in a page to take a user to and redirects them there
-   */
-  function redirectToErrorPage(destination, errorMsg) {
-    console.log("destination" + destination);
-    console.log("errorMsg: " + errorMsg);
-    console.log("yeah it be great if someone implemented this function, thanks");
+  function redirectToErrorPage(destination) {
+    $location.path('/' + destination);
   }
 
   $scope.requiredQuestionsMet = function () {
@@ -180,7 +178,6 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         }
       return true;
     } else {
-      // No user is signed in.
       return false;
     }
   }
