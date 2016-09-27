@@ -19,15 +19,17 @@
         <md-nav-item md-nav-href="#join" name="Quiz">Quiz</md-nav-item>
         <md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
       </md-nav-bar>-->
-      <md-button class="sign-in-button md-raised md-accent" ng-click="googleSignIn()" ng-hide="userSignedIn()">Sign In </md-button>
-      <md-button class="sign-in-button md-raised md-primary" ng-click="signUserOut()" ng-show="userSignedIn()">Sign Out</md-button>
+      <div><i class="sign-in-button material-icons" ng-click="googleSignIn()" ng-hide="userSignedIn()">person_outline</i></div>
+      <div><i class="sign-in-button material-icons" ng-click="signUserOut()" ng-show="userSignedIn()">person</i></div>
 
-      <div class="side-nav-button"><i class="material-icons " ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-sm>menu</i></div>
+      <div class="side-nav-button"><i class="material-icons " ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
     </div>
   </div>
   <div class="main-container" layout="row">
-    <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="leftNav"
-      md-whiteframe="4">
+
+    <div class="flex-margin" flex=10 hide-sm hide-xs></div>
+
+    <md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-xs')" md-component-id="leftNav">
       <md-toolbar>
         <h1 class="md-toolbar-tools">Quiz</h1>
       </md-toolbar>
@@ -38,16 +40,43 @@
       <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Edit'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
         href="#edit">Edit</md-button>
     </md-sidenav>
-    <md-content class="main-right" flex layout-padding>
-      <ng-view></ng-view>
+    <md-content flex layout-padding >
+      <ng-view class="main-right" flex></ng-view>
     </md-content>
-    <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="right" md-whiteframe="4">
+    <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-md')" md-component-id="right" >
       <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">User Hub</h1>
       </md-toolbar>
     </md-sidenav>
 
+    <div class="flex-margin" flex=10 hide-sm hide-xs></div>
+
   </div>
+  <footer>
+      <div layout="row" layout-align="center center">
+        <div flex=20></div>
+        <div flex=20>
+          <h4>Social</h4>
+          <a href="#">Facebook</a>
+          <a href="#">Tweeter</a>
+          <a href="#">Instgrams</a>
+        </div>
+        <div flex=20>
+          <h4>Quiz</h4>
+          <a href="#/create">Create</a>
+          <a href="#/Take">Take</a>
+          <a href="#/edit">Edit</a>
+        </div>
+        <div flex=20>
+          <h4>Contact Us</h4>
+          <a href="#">Facebook</a>
+          <a href="#">Tweeter</a>
+          <a href="#">Instgrams</a>
+        </div>        
+        <div flex=20></div>        
+      </div>
+  </footer>
+
 </body>
 
 <!-- Angular Material requires Angular.js Libraries -->

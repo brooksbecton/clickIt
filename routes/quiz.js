@@ -37,7 +37,8 @@ function Quizzer(){
 
   this.initQuiz = function(qOwner, qInstructor, qName, qType, qWhiteList){
     var newQuiz = new multiChoiceQuiz();
-    var quizId = generateId();
+    // var quizId = generateId();
+    var quizId = "fatCat";
 
     newQuiz['id'] = quizId;
     newQuiz['instructor'] = qInstructor;
@@ -236,6 +237,6 @@ var user = {'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'p
 quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
-// demoInitQuiz(quizMaster);
+demoInitQuiz(quizMaster);
 
 module.exports = router;

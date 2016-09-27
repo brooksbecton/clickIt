@@ -2,8 +2,6 @@ angular.module("quizModule").controller('leftNavCtrl', function ($http, $mdSiden
 
     var _this = this;
 
-    this.t = true;
-
     this.toggleLeft = leftNavToggler('leftNav');
 
     function leftNavToggler(componentId) {

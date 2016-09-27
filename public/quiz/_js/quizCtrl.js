@@ -139,8 +139,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         method: 'POST',
         url: 'quiz/submit/'
       }).then(function success(response) {
-
-      }, function error(response) {
+        alert("Answers Submitted!");      }, function error(response) {
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
       });
