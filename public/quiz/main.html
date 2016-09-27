@@ -6,13 +6,13 @@
   <!-- Angular Material style sheet -->
   <link rel="stylesheet" href="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
   <link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link rel="stylesheet" type="text/css" href="/public/stylesheets/quiz.css">
+  <link rel="stylesheet" type="text/css" href="/public/_css/quiz.css">
   <title ng-bind="$root.title + ' | Click It Quiz'"></title>
 </head>
 
 <body ng-cloak ng-controller="leftNavCtrl as lNavCtrl">
   <div class="md-primary top-nav" flex layout="column" layout-align="center center">
-    <p class="main-logo">Klikit</p>
+    <div class="main-logo"><img src="/public/_imgs/klikitLogo.svg"></div>
     <div layout="row">
       <!--<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
         <md-nav-item md-nav-href="#welcome" name="About">About</md-nav-item>
@@ -31,11 +31,22 @@
       <md-toolbar>
         <h1 class="md-toolbar-tools">Quiz</h1>
       </md-toolbar>
-      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Create'}" ng-click="lNavCtrl.LeftNavClose('leftNav')" href="#create">Create</md-button>
-      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Take'}" ng-click="lNavCtrl.LeftNavClose('leftNav')" href="#join">Join</md-button>
-      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Edit'}" ng-click="lNavCtrl.LeftNavClose('leftNav')" href="#edit">Edit</md-button>
+      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Create'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
+        href="#create">Create</md-button>
+      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Take'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
+        href="#join">Join</md-button>
+      <md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Edit'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
+        href="#edit">Edit</md-button>
     </md-sidenav>
-    <ng-view class="main-right" flex></ng-view>
+    <md-content class="main-right" flex layout-padding>
+      <ng-view></ng-view>
+    </md-content>
+    <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-sm')" md-component-id="right" md-whiteframe="4">
+      <md-toolbar class="md-theme-light">
+        <h1 class="md-toolbar-tools">User Hub</h1>
+      </md-toolbar>
+    </md-sidenav>
+
   </div>
 </body>
 

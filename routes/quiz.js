@@ -236,6 +236,6 @@ var user = {'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'p
 quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
-demoInitQuiz(quizMaster);
+// demoInitQuiz(quizMaster);
 
 module.exports = router;
