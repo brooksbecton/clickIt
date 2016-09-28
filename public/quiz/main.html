@@ -41,11 +41,87 @@
         href="#edit">Edit</md-button>
     </md-sidenav>
     <div flex class="main-right">
-      <ng-view  flex></ng-view>
+      <ng-view flex></ng-view>
     </div>
-    <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-md')" md-component-id="right" >
+    <md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-md')" md-component-id="right">
       <md-toolbar class="md-theme-light">
         <h1 class="md-toolbar-tools">User Hub</h1>
+        <md-content>
+          <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">CSCI Final Exam</span>
+                <span class="md-subhead">Mr. Bob</span>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-sm card-media"></div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Join Quiz</md-button>
+            </md-card-actions>
+          </md-card>
+
+          <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">CSCI Database Exam</span>
+                <span class="md-subhead">Dr. Bob</span>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-sm card-media"></div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Join Quiz</md-button>
+            </md-card-actions>
+          </md-card>
+
+          <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Networking Exam</span>
+                <span class="md-subhead">Dr. An</span>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-sm card-media"></div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Join Quiz</md-button>
+            </md-card-actions>
+          </md-card>
+
+          <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Networking Exam</span>
+                <span class="md-subhead">Dr. An</span>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-sm card-media"></div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Join Quiz</md-button>
+            </md-card-actions>
+          </md-card>
+
+          <md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
+            <md-card-title>
+              <md-card-title-text>
+                <span class="md-headline">Networking Exam</span>
+                <span class="md-subhead">Dr. An</span>
+              </md-card-title-text>
+              <md-card-title-media>
+                <div class="md-media-sm card-media"></div>
+              </md-card-title-media>
+            </md-card-title>
+            <md-card-actions layout="row" layout-align="end center">
+              <md-button>Join Quiz</md-button>
+            </md-card-actions>
+          </md-card>
+        </md-content>
       </md-toolbar>
     </md-sidenav>
 
@@ -53,30 +129,30 @@
 
   </div>
   <footer md-whiteframe="4">
-      <div layout="row" layout-align="center center">
-        <div flex=20></div>
-        <div flex=20>
-          <h4>Social</h4>
-          <a href="#">Facebook</a>
-          <a href="#">Tweeter</a>
-          <a href="#">Instgrams</a>
-        </div>
-        <div flex=20>
-          <h4>Quiz</h4>
-          <a href="#/create">Create</a>
-          <a href="#/Take">Take</a>
-          <a href="#/edit">Edit</a>
-        </div>
-        <div flex=20>
-          <h4>Contact Us</h4>
-          <a href="#">Facebook</a>
-          <a href="#">Tweeter</a>
-          <a href="#">Instgrams</a>
-        </div>        
-        <div flex=20></div>        
+    <div layout="row" layout-align="center center">
+      <div flex=20></div>
+      <div flex=20>
+        <h4>Social</h4>
+        <a href="#">Facebook</a>
+        <a href="#">Tweeter</a>
+        <a href="#">Instgrams</a>
       </div>
+      <div flex=20>
+        <h4>Quiz</h4>
+        <a href="#/create">Create</a>
+        <a href="#/Take">Take</a>
+        <a href="#/edit">Edit</a>
+      </div>
+      <div flex=20>
+        <h4>Contact Us</h4>
+        <a href="#">Facebook</a>
+        <a href="#">Tweeter</a>
+        <a href="#">Instgrams</a>
+      </div>
+      <div flex=20></div>
+    </div>
   </footer>
-
+  
 </body>
 
 <!-- Angular Material requires Angular.js Libraries -->
@@ -95,11 +171,6 @@
 <!-- AngularFire -->
 <script src="//cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
 
-<script>
-
-  </script>
-
-
 <script type="text/javascript">   
       angular.module("quizModule", ['ngRoute', 'ngMaterial'])
         .config(function($mdThemingProvider) {
@@ -114,6 +185,7 @@
 <script src="/public/quiz/_js/createQuizCtrl.js"></script>
 <script src="/public/quiz/_js/quizCtrl.js"></script>
 <script src="/public/quiz/_js/leftNavCtrl.js"></script>
+<script src="/public/quiz/_js/quizHubCtrl.js"></script>
 
 </html>
 
