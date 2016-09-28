@@ -11,12 +11,11 @@ firebase.initializeApp(config);
 var provider = new firebase.auth.GoogleAuthProvider();
 
 angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $location, $rootScope, $route) {
-
   $scope.errors = {};
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-  $scope.changeView = function(view){
-    $location.path(view);
+  $scope.changeView = function (view) {
+    $location.path('/' + view);
   }
 
   $scope.editQuizDriver = function (quizId) {
@@ -27,7 +26,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
   }
 
   $scope.getQuiz = function (quizId) {
-    var data = { "quizId": quizId};
+    var data = { "quizId": quizId };
 
     $http({
       data,
@@ -35,9 +34,9 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
       url: 'quiz/get/'
     }).then(function success(response) {
 
-        var quiz = response.data;
-        $scope.quizAnswers = initAnswers(quiz);
-        $scope.quiz = quiz;
+      var quiz = response.data;
+      $scope.quizAnswers = initAnswers(quiz);
+      $scope.quiz = quiz;
     }, function error(response) {
       var errorKey = 'submitQuiz';
       $scope.errors[errorKey] = response.statusText;
@@ -117,7 +116,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
 
   $scope.signUserOut = function () {
     firebase.auth().signOut().then(function () {
-      $location.path('/welcome');
+      $scope.changeView('welcome')
     }, function (error) {
       var errorKey = 'signUserOut';
       $scope.errors[errorKey] = error;
@@ -137,7 +136,8 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         method: 'POST',
         url: 'quiz/submit/'
       }).then(function success(response) {
-        alert("Answers Submitted!");      }, function error(response) {
+        $scope.changeView('quiz/success');
+      }, function error(response) {
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
       });
@@ -158,7 +158,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         method: 'POST',
         url: 'quiz/submit/'
       }).then(function success(response) {
-
+        
       }, function error(response) {
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
@@ -172,10 +172,10 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     var user = firebase.auth().currentUser;
 
     if (user) {
-      if ($scope.user == undefined){
-         $scope.user = user; 
-         $scope.$apply;
-        }
+      if ($scope.user == undefined) {
+        $scope.user = user;
+        $scope.$apply;
+      }
       return true;
     } else {
       return false;
