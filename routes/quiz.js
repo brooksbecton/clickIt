@@ -246,7 +246,6 @@ function demoGetOwnerIdFromQuizId(quizMaster) {
   });
 
 }
-
 function demoGetAnswersFromQuiz(quizMaster) {
   var quizId = 'B1e6Y2ca';
   quizMaster.getAnswersFromQuiz(quizId, function (answerKey) {
