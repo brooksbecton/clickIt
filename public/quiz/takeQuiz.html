@@ -17,8 +17,10 @@
                 </md-radio-button>
             </md-radio-group>
         </div>
-        <md-button type="submit" ng-click="submitQuizAnswers(quiz.id)" ng-hide="quizForm.$invalid" class="md-accent md-fab">
-            &#x2714;
-        </md-button>
+        <div ng-hide="quizForm.$invalid">
+            <md-button type="submit" ng-click="submitQuizAnswers(quiz.id)" class="md-raised md-primary pull-right">
+                Submit &#x2714;
+            </md-button>
+        </div>
     </form>
 </div>
