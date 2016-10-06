@@ -1,8 +1,24 @@
-  .currentSelectedPage{
+  .currentSelectedPage {
       background: #FFF;
-      box-shadow: 0 2px 4px -1px rgba(0,0,0,.2),0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12);
+      box-shadow: 0 2px 4px -1px rgba(0, 0, 0, .2), 0 4px 5px 0 rgba(0, 0, 0, .14), 0 1px 10px 0 rgba(0, 0, 0, .12);
       color: #ffab40;
   }
+
+  .create-quiz-slide-in{
+      color: green ;
+      animation-name: slide-in;
+      animation-duration: 1s;
+      -webkit-animation-name: slide-in; /* Chrome, Safari, Opera */
+      -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+      position: absolute;
+  }
+  .create-quiz-slide-out{
+      animation-name: slide-out;
+      animation-duration: 1s;
+      -webkit-animation-name: slide-out; /* Chrome, Safari, Opera */
+      -webkit-animation-duration: 1s; /* Chrome, Safari, Opera */
+  }
+
   h1,
   h2,
   h3,
@@ -11,19 +27,22 @@
   h6 {
       font-family: 'Oswald', sans-serif;
   }
-  .flex-margin{
-    background-color: rgba(220, 220, 220, 0.53);;
+  .main-container .flex-margin {
+      max-height: inherit;
+      min-height: 100%;
+      background-color: rgba(220, 220, 220, 0.53);
+      ;
   }
-  footer{
-    background-color: #ffab40;
-    padding: 15px;    
-    text-align: center;
+  footer {
+      background-color: #ffab40;
+      padding: 15px;
+      text-align: center;
   }
-  footer a{
-    color: black;
-    display: block;
-    text-decoration: none;
-    padding: 5px;
+  footer a {
+      color: black;
+      display: block;
+      text-decoration: none;
+      padding: 5px;
   }
   i {
       cursor: pointer;
@@ -31,32 +50,31 @@
   i:focus {
       outline: -webkit-focus-ring-color 0px;
   }
-
-.leftSideNavLink{
+  .leftSideNavLink {
       font-size: 17px;
   }
-  .main-logo{
-    padding: 20px;
-    width: 250px;
+  .main-logo {
+      padding: 20px;
+      width: 250px;
   }
   md-sidenav {
       background-color: gainsboro;
   }
-  .main-container{
-      min-height: 100% ;
+  .main-container {
+      min-height: 100%;
   }
   .main-right {
       background-color: #FFF;
       padding: 20px;
       overflow: auto;
   }
-  .md-fab{
+  .md-fab {
       float: right;
   }
-  .pull-left{
-    float: left;
+  .pull-left {
+      float: left;
   }
-  .pull-right{
+  .pull-right {
       float: right;
   }
   .sign-in-button {
@@ -71,10 +89,42 @@
       left: 15px;
       top: 15px;
   }
-    .top-nav {
+  .top-nav {
       background-color: #ffab40;
   }
-  /*
-Copyright 2016 Google Inc. All Rights Reserved. 
-Use of this source code is governed by an MIT-style license that can be in foundin the LICENSE file at http://material.angularjs.org/license.
+
+/**
+
+    Animations
+
 */
+@-webkit-keyframes slide-in {
+    0% {
+        background-color: red;
+        left: -1000px;
+    }
+    100% { 
+        background-color: green;        
+        left: 0; 
+    }
+}
+
+@keyframes slide-in {
+    0% {
+        background-color: red;
+        left: -1000px;
+    }
+    100% { 
+        background-color: green;        
+        left: 0; 
+    }
+}
+@keyframes slide-out {
+    0% {
+        left: 0;
+    }
+    100% { 
+        left: -1000px;
+    }
+}
+
