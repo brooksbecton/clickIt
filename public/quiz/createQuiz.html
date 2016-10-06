@@ -1,53 +1,70 @@
 <h1>Create a Quiz</h1>
 <form name="createQuiz" ng-controller="createQuizCtrl as createCtrl">
-<md-input-container class="md-block" flex-gt-sm="" required>
-    <label>Instructor Name</label>
-    <input >
-</md-input-container>
-<md-input-container class="md-block" flex-gt-sm="" required>
-    <label>Quiz Name</label>
-    <input type="text">
-</md-input-container>
-<md-switch ng-model="data.cb1" aria-label="Public">
-Public
-</md-switch>
-<md-input-container class="md-block" flex-gt-sm="" required>
-    <label>Project Type</label>
-    <md-select name="type" ng-model="quizType" required>
-        <md-option value="multiChoice">Multi-Choice</md-option>
-        <!-- TODO: Add back in disabled attributes to bottom two options -->
-        <md-option value="fillInTheBlank">Fill in the Blank</md-option>
-        <md-option value="freeResponse">Free Response</md-option>
-    </md-select>
-</md-input-container>
 
-
-<!-- Multiple Choice Quiz Option-->
-<div ng-show="quizType == 'multiChoice'">
-    <legend><h3>Create Questions</h3></legend>
-    <md-input-container class="md-block" flex-gt-sm="" required>
-        <label>Number of Questions</label>
-        <input ng-model="newQuestionsCount" type="number" min="0" max="100" name="newQuestionsAmmount" value="1">
-        <p class="md-warn" ng-show="createQuiz.newQuestionsAmmount.$error.max">
-            <em>The max number of questions is 100</em>
-        </p>
-        <p class="md-warn" ng-show="createQuiz.newQuestionsAmmount.$error.min">
-            <em>The minimum number of questions is 1</em>
-        </p>
-    </md-input-container>  
-
-    <div ng-repeat="question in createCtrl.intToArray(newQuestionsCount) track by $index" layout="row">
-        <md-input-container class="md-block" flex="66" required>
-            <label>Question</label>
-            <input ng-bind="'question-' + $index" type="text">
+    <div>
+        <md-input-container class="md-block" required>
+            <label>Instructor Name</label>
+            <input ng-model="createCtrl.createdQuiz.instructorName">
         </md-input-container>
-        <md-input-container class="md-block" flex="34" required>
-            <label>Number of Answers</label>
-            <input ng-model="createCtrl.newQuiz.qAnswer$index" type="number" min="1" max="10">
+        <md-input-container class="md-block" required>
+            <label>Quiz Name</label>
+            <input ng-model="createCtrl.createdQuiz.quizName" type="text">
         </md-input-container>
-        <div ng-repeat="answer in question">
-        </div>
+        <md-switch ng-model="createCtrl.createdQuiz.public" aria-label="Quiz Public">
+            Public
+        </md-switch>
+        <md-input-container class="md-block" required>
+            <label>Project Type</label>
+            <md-select name="type" ng-model="createCtrl.createdQuiz.quizType" required>
+                <md-option value="multiChoice">Multi-Choice</md-option>
+                <md-option value="fillInTheBlank">Fill in the Blank</md-option>
+                <md-option value="freeResponse">Free Response</md-option>
+            </md-select>
+        </md-input-container>
     </div>
-</div>
-<md-button aria-label="Submit" class="md-primary md-raised"> Submit </md-button>
+    <!-- Multiple Choice Quiz Option-->
+    <!--<div ng-show="createCtrl.createdQuiz.quizType == 'multiChoice'">
+        <legend>
+            <h3>Questions</h3>
+        </legend>
+        <div layout="column">
+            <md-input-container class="md-block" flex required>
+                <label>Question Text</label>
+                <input ng-model="createCtrl.tempQuestion.qText" type="text">
+            </md-input-container>
+            <div ng-repeat="answer in createCtrl.tempQuestion.qAnswers track by $index">
+                <md-input-container class="md-block" flex required>
+                    <label>Answer</label>
+                    <input ng-model="createCtrl.tempQuestion.qAnswers[$index]" type="text">
+                    <i ng-click="createCtrl.addAnswer($index)" class="material-icons pull-right">add</i>
+                    <i ng-click="createCtrl.clearAnswer($index)" class="material-icons pull-right">clear</i>
+                </md-input-container>
+            </div>
+        </div>
+
+        <md-button ng-click="createCtrl.addAnswer($index)" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
+    </div>-->
+
+    <div ng-show="createCtrl.createdQuiz.quizType == 'multiChoice'">
+        <h3>Questions</h3>
+            <div layout="column" ng-repeat="question in createCtrl.createdQuiz.questions track by $index">
+                <div layout="row">
+                <md-input-container flex class="md-block" required>
+                    <label>Question Text</label>
+                    <input ng-model="question.text">
+                </md-input-container>
+                <md-button class="pull-right" ng-click="createCtrl.addAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
+                </div>
+                <div ng-repeat="answer in question.answers track by $index">
+                    <md-input-container class="md-block" flex required>
+                        <label>Answer</label>
+                        <input ng-model="answer" type="text">
+                        <i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons pull-right">clear</i>
+                    </md-input-container>
+                </div>
+            </div>
+    </div>
+    <md-button ng-click="createCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
+
+    <md-button aria-label="Submit" class="md-primary md-raised"> Finish </md-button>
 </form>
