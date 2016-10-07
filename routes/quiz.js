@@ -163,6 +163,15 @@ function Quizzer(){
       res.send('fail');
     }
   });
+
+  router.post('/quiz/create/', function (req, res) {
+    var quiz = req.body.quiz;
+
+    // console.log(quiz);
+
+    res.send('success');
+  });
+
   router.post('/quiz/close/', function (req, res) {
     var quizId = req.body.quizId;
     var userId = req.body.userId;
