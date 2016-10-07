@@ -3,9 +3,7 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   var _this = this;
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
-  this.addAnswer = function(questionId){
-    console.log("qId: " + questionId);
-    console.log(_this.createdQuiz);
+  this.addNewAnswer = function(questionId){
     _this.createdQuiz.questions[questionId].answers.push("");
   }
 
@@ -14,7 +12,6 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   }
 
   this.clearAnswer = function(questionId, answerId){
-    console.log("clearAnswer() " + answerId);
     _this.createdQuiz.questions[questionId].answers.splice(answerId, 1);
   }
 
@@ -25,22 +22,11 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
     quizType: '',
     questions: [
       {
-        'text': "default",
+        'text': "",
          'answers': [
-         "catfat"
+         ""
         ]
       }
     ]
   }
-
-  this.intToArray = function (num) {
-    return new Array(num);
-  }
-
-  this.questionTemplate = {
-    'text': "",
-    'answers': [""]
-  }
-
-
 });

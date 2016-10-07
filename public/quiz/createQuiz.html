@@ -44,27 +44,32 @@
 
         <md-button ng-click="createCtrl.addAnswer($index)" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
     </div>-->
-
     <div ng-show="createCtrl.createdQuiz.quizType == 'multiChoice'">
         <h3>Questions</h3>
             <div layout="column" ng-repeat="question in createCtrl.createdQuiz.questions track by $index">
+                <p><strong>Question {{$index+1}}</strong></p>
                 <div layout="row">
                 <md-input-container flex class="md-block" required>
                     <label>Question Text</label>
                     <input ng-model="question.text">
                 </md-input-container>
-                <md-button class="pull-right" ng-click="createCtrl.addAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
+                <md-button class="pull-right" ng-click="createCtrl.addNewAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
                 </div>
                 <div ng-repeat="answer in question.answers track by $index">
+                    <span class="pull-left">
+                        {{multiChoiceLetters[$index]}}
+                    </span>
                     <md-input-container class="md-block" flex required>
                         <label>Answer</label>
-                        <input ng-model="answer" type="text">
+                        <input ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
                         <i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons pull-right">clear</i>
                     </md-input-container>
                 </div>
             </div>
+        <md-button ng-click="createCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
     </div>
-    <md-button ng-click="createCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
 
     <md-button aria-label="Submit" class="md-primary md-raised"> Finish </md-button>
+    {{createCtrl.createdQuiz}}
+    
 </form>

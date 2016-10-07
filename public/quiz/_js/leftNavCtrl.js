@@ -1,5 +1,4 @@
 angular.module("quizModule").controller('leftNavCtrl', function ($http, $mdSidenav, $route, $rootScope, $scope) {
-    console.log("init");
 
     var _this = this;
     this.toggleLeft = leftNavToggler('leftNav');
