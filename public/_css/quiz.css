@@ -71,6 +71,12 @@
   .md-fab {
       float: right;
   }
+  .md-sidenav-right md-content{
+      background-color: gainsboro;
+  }
+  p{
+      font-family: 'Roboto', sans-serif;
+  }
   .pull-left {
       float: left;
   }
