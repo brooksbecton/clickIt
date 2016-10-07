@@ -17,6 +17,7 @@ function Quizzer() {
   }
 
   this.addPlayerToQuiz = function (ownerId, quizId, user) {
+    console.log(ownerId + ' ' + quizId  + ' ' + user);
     _this.writeUserOnQuizToDB(ownerId, quizId, user);
   }
 
@@ -90,11 +91,11 @@ function Quizzer() {
     }
   }
 
-  function getQuizzesFromDB() {
+  function getQuizzesFromDB(callback) {
     var dbQuizzesRef = firebase.database().ref('Quizzes/');
 
     dbQuizzesRef.on('value', function (snapshot) {
-      _this.quizzes = snapshot.val();
+      callback(snapshot.val())
     });
   }
 
@@ -104,6 +105,8 @@ function Quizzer() {
 
     userQuizRef.on('value', function (snapshot) {
       ownerId = snapshot.val().ownerId;
+      console.log("getOwnerIdFromQuizId " + "with " + quizId);
+      console.log("found: " + ownerId);
       callback(ownerId);
     });
 
@@ -188,7 +191,10 @@ function Quizzer() {
     var user = req.body.user;
     var quizId = req.body.quizId;
     if (_this.quizExists(quizId)) {
-      var ownerId = _this.getOwnerIdFromQuizId(quizId);
+      var ownerId = "";
+      _this.getOwnerIdFromQuizId(quizId, function(oId){
+        ownerId = oId;
+      });
 
       _this.addPlayerToQuiz(ownerId, quizId, user);
 
@@ -203,8 +209,11 @@ function Quizzer() {
     var quizId = req.body.quizId;
     var userId = req.body.userId;
     if (_this.quizExists(quizId)) {
-      var ownerId = _this.getOwnerIdFromQuizId(quizId);
-
+      var ownerId = "";
+      _this.getOwnerIdFromQuizId(quizId, function(oId){
+        ownerId = oId;
+      });
+      
       _this.writeAnswersToDB(ownerId, userId, quizId, answers);
 
       res.send('success');
@@ -239,7 +248,7 @@ function demoInitQuiz(quizMaster) {
   quizMaster.openQuiz(quiz['id'], user['uid'], true);
 }
 function demoGetOwnerIdFromQuizId(quizMaster) {
-  var quizId = 'B1e6Y2ca';
+  var quizId = 'fatcat';
   quizMaster.getOwnerIdFromQuizId(quizId, function (ownerId) {
     console.log('here');
     console.log('ownerID: ' + ownerId);
@@ -258,10 +267,10 @@ var quizMaster = new Quizzer;
 
 var user = { 'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'provider': 'google' };
 
-// quizMaster.__init__();
+quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
 // demoInitQuiz(quizMaster);
-// demoGetOwnerIdFromQuizId(quizMaster);
+demoGetOwnerIdFromQuizId(quizMaster);
 demoGetAnswersFromQuiz(quizMaster);
 module.exports = router;
