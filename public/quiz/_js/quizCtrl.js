@@ -10,7 +10,7 @@ firebase.initializeApp(config);
 
 var provider = new firebase.auth.GoogleAuthProvider();
 
-angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $location, $rootScope, $route) {
+angular.module("quizModule").controller('quizCtrl', function ($http, $location, $rootScope, $routeParams, $scope) {
   $scope.errors = {};
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
 
@@ -25,24 +25,41 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
     }
   }
 
-  $scope.getQuiz = function (quizId) {
-    var data = { "quizId": quizId };
+  $scope.joinQuiz = function (quizId) {
 
-    $http({
-      data,
-      method: 'POST',
-      url: 'quiz/get/'
-    }).then(function success(response) {
+    if ($scope.userSignedIn()) {
+      var data = { "quizId": quizId };
 
-      var quiz = response.data;
-      $scope.quizAnswers = initAnswers(quiz);
-      $scope.quiz = quiz;
-    }, function error(response) {
-      var errorKey = 'submitQuiz';
-      $scope.errors[errorKey] = response.statusText;
-      redirectToErrorPage('400');
-    });
+      $http({
+        data,
+        method: 'POST',
+        url: 'quiz/get/'
+      }).then(function success(response) {
 
+        var quiz = response.data;
+        $scope.quizAnswers = initAnswers(quiz);
+        $scope.quiz = quiz;
+      }, function error(response) {
+        var errorKey = 'submitQuiz';
+        $scope.errors[errorKey] = response.statusText;
+        redirectToErrorPage('400');
+      });
+    } else {
+      console.log("User Not Logged In");
+      var notSignedInPage = "notSignedIn";
+      redirectToErrorPage(notSignedInPage);
+    }
+  }
+
+  $scope.getQuizIdFromParam = function () {
+    /**
+     * If there is a quizId the URL, 
+     * then it will take the user directly to the quiz
+     */
+    $scope.quizId = $routeParams.quizId;
+    if($scope.quizId){
+      $scope.joinQuiz($scope.quizId)
+    } 
   }
 
   $scope.googleSignIn = function () {
@@ -60,31 +77,6 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
       var email = error.email;
       var credential = error.credential;
     });
-  }
-
-  $scope.joinQuiz = function (quizId) {
-    if ($scope.userSignedIn()) {
-      console.log($scope.user);
-      var data = { 'quizId': quizId, "user": $scope.user }
-
-      $http({
-        data,
-        method: 'POST',
-        url: 'quiz/join/'
-      }).then(function success(response) {
-        $scope.getQuiz(quizId);
-      }, function error(response) {
-        var errorKey = 'joinQuiz';
-        $scope.errors[errorKey] = response.statusText;
-
-        redirectToErrorPage('400');
-
-      });
-    } else {
-      console.log("User Not Logged In");
-      var notSignedInPage = "notSignedIn";
-      redirectToErrorPage(notSignedInPage);
-    }
   }
 
   /*
@@ -158,7 +150,7 @@ angular.module("quizModule").controller('quizCtrl', function ($scope, $http, $lo
         method: 'POST',
         url: 'quiz/submit/'
       }).then(function success(response) {
-        
+
       }, function error(response) {
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;

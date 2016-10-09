@@ -20,7 +20,7 @@ angular.module("quizModule").config(function ($routeProvider) {
             title: "Edit",
             controller: 'quizCtrl'
         })
-        .when("/join", {
+        .when("/join/:quizId?", {
             templateUrl: '/public/quiz/takeQuiz.html',
             title: "Take",
             controller: 'quizCtrl'
