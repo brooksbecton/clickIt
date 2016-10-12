@@ -43,7 +43,7 @@ function Quizzer() {
     newQuiz['type'] = qType;
     newQuiz['whiteList'] = qWhiteList;
 
-    _this.writeQuizToDB(qOwner['uid'], newQuiz);
+    _this.writeQuizToDB(qOwner['uid'], newQuiz, ['red', 'blue'], [10, 10]);
     return newQuiz;
   };
 
@@ -105,8 +105,8 @@ function Quizzer() {
 
     userQuizRef.on('value', function (snapshot) {
       ownerId = snapshot.val().ownerId;
-      console.log("getOwnerIdFromQuizId " + "with " + quizId);
-      console.log("found: " + ownerId);
+      // console.log("getOwnerIdFromQuizId " + "with " + quizId);
+      // console.log("found: " + ownerId);
       callback(ownerId);
     });
 
@@ -122,6 +122,27 @@ function Quizzer() {
     });
   }
 
+  this.getUserAnswersFromQuiz = function (quizId, userId, callback) {
+    _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
+      var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/answers/' + userId + '/');
+      userQuizRef.on('value', function (snapshot) {
+        answers = snapshot.val().answers;
+        callback(answers);
+      });
+    });
+  }
+
+  this.getQuestionsWorthFromQuiz = function (quizId, callback) {
+    _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
+      var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/');
+      userQuizRef.on('value', function (snapshot) {
+        questionsWorth = snapshot.val().questionsWorth;
+        callback(questionsWorth);
+      });
+    });
+  }
+
+  // Adding grade quiz here.
   this.writeAnswersToDB = function (ownerId, userId, quizId, answers) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
       answers
@@ -134,7 +155,8 @@ function Quizzer() {
     });
   }
 
-  this.writeQuizToDB = function (ownerId, quiz) {
+  // Added answerKey and questionsWorth to this. questionsWorth is an array of numbers that determine how much a question is worth.
+  this.writeQuizToDB = function (ownerId, quiz, answerKey, questionsWorth) {
     //Writing to Users Tree
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').set({
       quiz: quiz
@@ -142,6 +164,14 @@ function Quizzer() {
     //Writing to Quizzes Composite Tree
     firebase.database().ref('Quizzes/' + quiz['id']).set({
       ownerId
+    });
+
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').update({
+      answerKey
+    });
+
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').update({
+      questionsWorth
     });
   }
 
@@ -151,11 +181,41 @@ function Quizzer() {
     });
   }
 
+  this.gradeQuiz = function (ownerId, quizId, userId) {
+    var answerKey = [];
+    var questionsWorth = [];
+    var userAnswers = [];
+
+    _this.getAnswersFromQuiz(quizId, function(aKey){
+      answerKey = aKey;
+    });
+
+    _this.getQuestionsWorthFromQuiz(quizId, function(worth){
+      questionsWorth = worth;
+    });
+
+    _this.getUserAnswersFromQuiz(quizId, userId, function(answers){
+      userAnswers = answers;
+    })
+
+    keyLength = answerKey.length;
+    var score = 0;
+    for (i = 0; i < keyLength; i++){
+      if (answerKey[i] == userAnswers[i]){
+        score += questionsWorth[i];
+      }
+    }
+
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
+      score
+    });
+
+  }
 
   /**
    * 
    * 
-   * Routers
+   * Routerses
    * 
    * 
    */
@@ -178,15 +238,6 @@ function Quizzer() {
       res.send('fail');
     }
   });
-
-  router.post('/quiz/create/', function (req, res) {
-    var quiz = req.body.quiz;
-
-    // console.log(quiz);
-
-    res.send('success');
-  });
-
   router.post('/quiz/close/', function (req, res) {
     var quizId = req.body.quizId;
     var userId = req.body.userId;
@@ -224,6 +275,7 @@ function Quizzer() {
       });
       
       _this.writeAnswersToDB(ownerId, userId, quizId, answers);
+      _this.gradeQuiz(ownerId, quizId, userId);
 
       res.send('success');
     } else {
@@ -269,7 +321,13 @@ function demoGetAnswersFromQuiz(quizMaster) {
   quizMaster.getAnswersFromQuiz(quizId, function (answerKey) {
     console.log('answerKey: ' + answerKey);
   });
+}
 
+function demoGetQuestionsWorthFromQuiz(quizMaster) {
+  var quizId = 'Skcq9zFA';
+  quizMaster.getQuestionsWorthFromQuiz(quizId, function (worth) {
+    console.log('Worth: ' + worth);
+  });
 }
 
 var quizMaster = new Quizzer;
