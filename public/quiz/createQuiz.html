@@ -4,19 +4,19 @@
     <!-- Meta Information -->
     <div>
         <md-input-container class="md-block" required>
-            <label>Instructor Name</label>
-            <input ng-model="createCtrl.createdQuiz.instructor">
+            <label for="instructorName">Instructor Name</label>
+            <input id="instructorName" ng-model="createCtrl.createdQuiz.instructor">
         </md-input-container>
         <md-input-container class="md-block" required>
-            <label>Quiz Name</label>
-            <input ng-model="createCtrl.createdQuiz.quizName" type="text">
+            <label for="quizName">Quiz Name</label>
+            <input id="quizName" ng-model="createCtrl.createdQuiz.quizName" type="text">
         </md-input-container>
         <md-switch ng-model="createCtrl.createdQuiz.open" aria-label="Quiz Public">
             Public
         </md-switch>
         <md-input-container class="md-block" required>
-            <label>Project Type</label>
-            <md-select name="type" ng-model="createCtrl.createdQuiz.type" required>
+            <label for="projectType">Project Type</label>
+            <md-select id="projectType" name="type" ng-model="createCtrl.createdQuiz.type" required>
                 <md-option value="multiChoice">Multi-Choice</md-option>
                 <md-option value="fillInTheBlank">Fill in the Blank</md-option>
                 <md-option value="freeResponse">Free Response</md-option>
@@ -29,15 +29,16 @@
         <div layout="column" ng-repeat="question in createCtrl.createdQuiz.questions track by $index">
             <div layout="row">
                 <md-input-container flex class="md-block" required>
-                    <label>Question {{$index + 1}}</label>
+                    <label for="question{{$index + 1}}">Question {{$index + 1}}</label>
                     <input ng-model="question.question">
+
                 </md-input-container>
                 <md-button class="pull-right" ng-click="createCtrl.addNewAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
             </div>
             <div layout="row" ng-repeat="answer in question.answers track by $index">
                 <md-input-container flex required>
-                    <label>{{multiChoiceLetters[$index]}}</label>
-                    <input ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
+                    <label for="{{multiChoiceLetters[$index]}}">{{multiChoiceLetters[$index]}}</label>
+                    <input id="{{multiChoiceLetters[$index]}}" ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
                 </md-input-container>
                 <md-checkbox name="name" aria-label="Answer is correct" ng-model="createCtrl.createdQuizKey[$parent.$index][$index]"></md-checkbox>
                 <i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons clear">clear</i>
