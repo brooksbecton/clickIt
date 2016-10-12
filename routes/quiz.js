@@ -265,7 +265,7 @@ function demoGetOwnerIdFromQuizId(quizMaster) {
 
 }
 function demoGetAnswersFromQuiz(quizMaster) {
-  var quizId = 'B1e6Y2ca';
+  var quizId = 'fatcat';
   quizMaster.getAnswersFromQuiz(quizId, function (answerKey) {
     console.log('answerKey: ' + answerKey);
   });
@@ -280,6 +280,6 @@ quizMaster.__init__();
 
 // demoAddingUserToDB(user, quizMaster);
 // demoInitQuiz(quizMaster);
-demoGetOwnerIdFromQuizId(quizMaster);
-demoGetAnswersFromQuiz(quizMaster);
+// demoGetOwnerIdFromQuizId(quizMaster);
+// demoGetAnswersFromQuiz(quizMaster);
 module.exports = router;

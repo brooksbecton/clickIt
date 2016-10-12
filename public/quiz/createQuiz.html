@@ -34,21 +34,20 @@
                 </md-input-container>
                 <md-button class="pull-right" ng-click="createCtrl.addNewAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
             </div>
-            <md-radio-group ng-model="createdQuizKey[$index]" ng-repeat="answer in question.answers track by $index">
-                <div layout="row">
-                    <md-input-container class="md-block" flex required>
-                        <label>{{multiChoiceLetters[$index]}}</label>
-                        <input ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
-                    </md-input-container>
-                    <md-radio-button aria-label="Answer is correct" value="$index"></md-radio-button>
-                    <i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons">clear</i>
-                </div>
-            </md-radio-group>
+            <div layout="row" ng-repeat="answer in question.answers track by $index">
+                <md-input-container flex required>
+                    <label>{{multiChoiceLetters[$index]}}</label>
+                    <input ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
+                </md-input-container>
+                <md-checkbox name="name" aria-label="Answer is correct" ng-model="createCtrl.createdQuizKey[$parent.$index][$index]"></md-checkbox>
+                <i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons clear">clear</i>
+            </div>
         </div>
         <md-button ng-click="createCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
     </div>
 
     <md-button ng-click="createCtrl.submitQuiz()" aria-label="Submit" class="md-primary md-raised"> Finish </md-button>
-    {{createCtrl.createdQuiz}}
+    {{createCtrl.createdQuiz}} {{createCtrl.createdQuizKey}}
+
 
 </form>

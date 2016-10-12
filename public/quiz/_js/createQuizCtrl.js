@@ -8,7 +8,14 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   }
 
   this.addQuestion = function () {
-    _this.createdQuiz.questions.push(_this.questionTemplate);
+       var newQuestion = {
+        'question': "",
+        'answers': [
+          ""
+        ]
+      }
+    _this.createdQuiz.questions.push(newQuestion);
+    _this.createdQuizKey.push([]);
   }
 
   this.clearAnswer = function (questionId, answerId) {
@@ -32,7 +39,7 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
     whiteList: []
   }
 
-  this.createdQuizKey = [];
+  this.createdQuizKey = [[]];
 
   this.submitQuiz = function () {
     if ($scope.userSignedIn()) {
