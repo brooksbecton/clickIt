@@ -40,6 +40,7 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   }
 
   this.createdQuizKey = [[]];
+  this.createdQuestionsWorth = [];
 
   this.submitQuiz = function () {
     if ($scope.userSignedIn()) {
