@@ -68,6 +68,7 @@ angular.module("quizModule").controller('quizCtrl', function ($http, $location, 
       $scope.googleToken = result.credential.accessToken;
       // The signed-in user info.
       $scope.user = result.user;
+      console.log($scope.user);
       $scope.$apply();
     }).catch(function (error) {
       // Handle Errors here.

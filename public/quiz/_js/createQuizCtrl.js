@@ -1,4 +1,4 @@
-angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSidenav, $route, $rootScope, $scope) {
+angular.module("quizModule").controller('createQuizCtrl', function ($http, $location, $mdSidenav, $route, $rootScope, $scope) {
 
   var _this = this;
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
@@ -47,25 +47,32 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
    * to the answer strings 
    */
   function processCorrectAnswers() {
-    _this.createdQuiz.questions.forEach(function (question, i){
-        if (_this.createdQuizKey[i]) {
-          _this.createdQuizKey[i] = question.answers[i];
-        }
+    _this.createdQuiz.questions.forEach(function (question, i) {
+      if (_this.createdQuizKey[i]) {
+        _this.createdQuizKey[i] = question.answers[i];
+      }
     });
   }
 
   this.submitQuiz = function () {
-      processCorrectAnswers();
+    processCorrectAnswers();
 
     if ($scope.userSignedIn()) {
-      var data = { 'quiz': _this.createdQuiz }
+      var data = {
+        'userId': $scope.user.uid,
+        'answerKey': _this.createdQuizKey,
+        'quiz': _this.createdQuiz,
+        'questionsWorth': _this.createdQuestionsWorth
+      };
+
       $http({
         data,
         method: 'POST',
         url: 'quiz/create/'
       }).then(function success(response) {
+            $location.path('/create/success');
       }, function error(response) {
-        var errorKey = 'joinQuiz';
+        var errorKey = 'createQuiz';
         $scope.errors[errorKey] = response.statusText;
 
         redirectToErrorPage('400');
@@ -75,6 +82,20 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
       console.log("User Not Logged In");
       var notSignedInPage = "notSignedIn";
       redirectToErrorPage(notSignedInPage);
+    }
+  }
+
+  function userSignedIn() {
+    var user = firebase.auth().currentUser;
+
+    if (user) {
+      if ($scope.user == undefined) {
+        $scope.user = user;
+        $scope.$apply;
+      }
+      return true;
+    } else {
+      return false;
     }
   }
 

@@ -11,13 +11,13 @@ function Quizzer() {
   var _this = this;
 
   this.__init__ = function () {
-    getQuizzesFromDB(function(dbQuizzes){
+    getQuizzesFromDB(function (dbQuizzes) {
       _this.quizzes = dbQuizzes;
     });
   }
 
   this.addPlayerToQuiz = function (ownerId, quizId, user) {
-    console.log(ownerId + ' ' + quizId  + ' ' + user);
+    console.log(ownerId + ' ' + quizId + ' ' + user);
     _this.writeUserOnQuizToDB(ownerId, quizId, user);
   }
 
@@ -157,11 +157,11 @@ function Quizzer() {
 
   // Added answerKey and questionsWorth to this. questionsWorth is an array of numbers that determine how much a question is worth.
   this.writeQuizToDB = function (ownerId, quiz, answerKey, questionsWorth) {
-    //Writing to Users Tree
+    //Writing quiz to Users Tree
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').set({
       quiz: quiz
     });
-    //Writing to Quizzes Composite Tree
+    //Writing quizId to Quizzes Composite Tree
     firebase.database().ref('Quizzes/' + quiz['id']).set({
       ownerId
     });
@@ -186,22 +186,22 @@ function Quizzer() {
     var questionsWorth = [];
     var userAnswers = [];
 
-    _this.getAnswersFromQuiz(quizId, function(aKey){
+    _this.getAnswersFromQuiz(quizId, function (aKey) {
       answerKey = aKey;
     });
 
-    _this.getQuestionsWorthFromQuiz(quizId, function(worth){
+    _this.getQuestionsWorthFromQuiz(quizId, function (worth) {
       questionsWorth = worth;
     });
 
-    _this.getUserAnswersFromQuiz(quizId, userId, function(answers){
+    _this.getUserAnswersFromQuiz(quizId, userId, function (answers) {
       userAnswers = answers;
     })
 
     keyLength = answerKey.length;
     var score = 0;
-    for (i = 0; i < keyLength; i++){
-      if (answerKey[i] == userAnswers[i]){
+    for (i = 0; i < keyLength; i++) {
+      if (answerKey[i] == userAnswers[i]) {
         score += questionsWorth[i];
       }
     }
@@ -224,7 +224,7 @@ function Quizzer() {
   });
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;
-    if (_this.quizExists(quizId)){
+    if (_this.quizExists(quizId)) {
       var ownerId = _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
 
         var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + "/quiz/");
@@ -247,12 +247,24 @@ function Quizzer() {
 
     res.send('success');
   });
+  router.post('/quiz/create/', function (req, res) {
+    var userId = req.body.userId;
+    var answerKey = req.body.answerKey;
+    var quiz = req.body.quiz;
+    var questionsWorth = req.body.questionsWorth;
+
+    quiz.id = generateId();
+
+    _this.writeQuizToDB(userId, quiz, answerKey, questionsWorth);
+
+    res.send('success');
+  });
   router.post('/quiz/join/', function (req, res) {
     var user = req.body.user;
     var quizId = req.body.quizId;
     if (_this.quizExists(quizId)) {
       var ownerId = "";
-      _this.getOwnerIdFromQuizId(quizId, function(oId){
+      _this.getOwnerIdFromQuizId(quizId, function (oId) {
         ownerId = oId;
       });
 
@@ -270,10 +282,10 @@ function Quizzer() {
     var userId = req.body.userId;
     if (_this.quizExists(quizId)) {
       var ownerId = "";
-      _this.getOwnerIdFromQuizId(quizId, function(oId){
+      _this.getOwnerIdFromQuizId(quizId, function (oId) {
         ownerId = oId;
       });
-      
+
       _this.writeAnswersToDB(ownerId, userId, quizId, answers);
       _this.gradeQuiz(ownerId, quizId, userId);
 
