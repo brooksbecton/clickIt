@@ -8,12 +8,12 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   }
 
   this.addQuestion = function () {
-       var newQuestion = {
-        'question': "",
-        'answers': [
-          ""
-        ]
-      }
+    var newQuestion = {
+      'question': "",
+      'answers': [
+        ""
+      ]
+    }
     _this.createdQuiz.questions.push(newQuestion);
     _this.createdQuizKey.push([]);
   }
@@ -42,10 +42,23 @@ angular.module("quizModule").controller('createQuizCtrl', function ($http, $mdSi
   this.createdQuizKey = [[]];
   this.createdQuestionsWorth = [];
 
+  /**
+   * Changes Booleans in createdQuestionsKey
+   * to the answer strings 
+   */
+  function processCorrectAnswers() {
+    _this.createdQuiz.questions.forEach(function (question, i){
+        if (_this.createdQuizKey[i]) {
+          _this.createdQuizKey[i] = question.answers[i];
+        }
+    });
+  }
+
   this.submitQuiz = function () {
+      processCorrectAnswers();
+
     if ($scope.userSignedIn()) {
       var data = { 'quiz': _this.createdQuiz }
-
       $http({
         data,
         method: 'POST',
