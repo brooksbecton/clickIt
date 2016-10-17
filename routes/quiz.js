@@ -142,6 +142,16 @@ function Quizzer() {
     });
   }
 
+  this.getQuizFromDB = function (quizId, callback) {
+    _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
+      var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/');
+      userQuizRef.on('value', function (snapshot) {
+        quiz = snapshot.val();
+        callback(quiz);
+      });
+    });
+  }
+  
   // Adding grade quiz here.
   this.writeAnswersToDB = function (ownerId, userId, quizId, answers) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
@@ -225,14 +235,10 @@ function Quizzer() {
   router.post('/quiz/get/', function (req, res) {
     var quizId = req.body.quizId;
     if (_this.quizExists(quizId)) {
-      var ownerId = _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
-
-        var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + "/quiz/");
-
-        userQuizRef.on('value', function (snapshot) {
-          res.send(snapshot.val());
+        _this.getQuizFromDB(quizId, function(quiz){
+          console.log(quiz);
+          res.send(quiz);
         });
-      });
     } else {
       res.status(400);
       res.send('fail');
@@ -334,7 +340,6 @@ function demoGetAnswersFromQuiz(quizMaster) {
     console.log('answerKey: ' + answerKey);
   });
 }
-
 function demoGetQuestionsWorthFromQuiz(quizMaster) {
   var quizId = 'Skcq9zFA';
   quizMaster.getQuestionsWorthFromQuiz(quizId, function (worth) {
