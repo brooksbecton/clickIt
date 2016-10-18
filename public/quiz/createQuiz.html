@@ -1,22 +1,22 @@
 <h1>Create a Quiz</h1>
-<form name="createQuiz" ng-controller="createQuizCtrl as createCtrl">
+<form name="createQuiz" ng-controller="quizCrudCtrl as crudCtrl">
 
 	<!-- Meta Information -->
 	<div>
 		<md-input-container class="md-block" required>
 			<label for="instructorName">Instructor Name</label>
-			<input id="instructorName" ng-model="createCtrl.createdQuiz.instructor">
+			<input id="instructorName" ng-model="crudCtrl.quiz.instructor">
 		</md-input-container>
 		<md-input-container class="md-block" required>
 			<label for="quizName">Quiz Name</label>
-			<input id="quizName" ng-model="createCtrl.createdQuiz.quizName" type="text">
+			<input id="quizName" ng-model="crudCtrl.quiz.quizName" type="text">
 		</md-input-container>
-		<md-switch ng-model="createCtrl.createdQuiz.open" aria-label="Quiz Public">
+		<md-switch ng-model="crudCtrl.quiz.open" aria-label="Quiz Public">
 			Public
 		</md-switch>
 		<md-input-container class="md-block" required>
 			<label for="projectType">Project Type</label>
-			<md-select id="projectType" name="type" ng-model="createCtrl.createdQuiz.type" required>
+			<md-select id="projectType" name="type" ng-model="crudCtrl.quiz.type" required>
 				<md-option value="multiChoice">Multi-Choice</md-option>
 				<md-option value="fillInTheBlank">Fill in the Blank</md-option>
 				<md-option value="freeResponse">Free Response</md-option>
@@ -24,8 +24,8 @@
 		</md-input-container>
 	</div>
 	<!-- Multiple Choice Quiz Option-->
-	<div ng-show="createCtrl.createdQuiz.type == 'multiChoice'">
-		<div layout="column" ng-repeat="question in createCtrl.createdQuiz.questions track by $index">
+	<div ng-show="crudCtrl.quiz.type == 'multiChoice'">
+		<div layout="column" ng-repeat="question in crudCtrl.quiz.questions track by $index">
 			<h3>Question {{$index + 1}}</h3>
 			<div layout-gt-sm="row">
 				<md-input-container flex class="md-block" required>
@@ -34,36 +34,36 @@
 				</md-input-container>
 				<md-input-container class="md-block" required>
 					<label for="question{{$index + 1}}Worth">Points</label>
-					<input id="question{{$index + 1}}Worth" type="number" ng-model="createCtrl.createdQuestionsWorth[$index]">
+					<input id="question{{$index + 1}}Worth" type="number" ng-model="crudCtrl.createdQuestionsWorth[$index]">
 				</md-input-container>
 
-				<md-button class="pull-right" ng-click="createCtrl.addNewAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
+				<md-button class="pull-right" ng-click="crudCtrl.addNewAnswer($index)" aria-label="Add New Answer">Add Answer</md-button>
 			</div>
 			<div layout="row" ng-repeat="answer in question.answers track by $index">
 				<md-input-container flex required>
 					<label for="{{multiChoiceLetters[$index]}}">{{multiChoiceLetters[$index]}}</label>
-					<input id="{{multiChoiceLetters[$index]}}" ng-model="createCtrl.createdQuiz.questions[$parent.$index].answers[$index]" type="text">
+					<input id="{{multiChoiceLetters[$index]}}" ng-model="crudCtrl.quiz.questions[$parent.$index].answers[$index]" type="text">
 				</md-input-container>
-				<div ng-show="createCtrl.createdQuizKey[$parent.$index][$index]" >
+				<div ng-show="crudCtrl.quizKey[$parent.$index][$index]" >
 					<span class="correct-label">Correct</span>
 				</div>
 
-				<md-checkbox name="name" aria-label="Answer is correct" ng-model="createCtrl.createdQuizKey[$parent.$index][$index]"></md-checkbox>
-				<i ng-click="createCtrl.clearAnswer($parent.$index, $index)" class="material-icons clear">clear</i>
+				<md-checkbox name="name" aria-label="Answer is correct" ng-model="crudCtrl.quizKey[$parent.$index][$index]"></md-checkbox>
+				<i ng-click="crudCtrl.clearAnswer($parent.$index, $index)" class="material-icons clear">clear</i>
 			</div>
 		</div>
 		<div layout="row">
-			<md-button ng-click="createCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
-			<md-button ng-click="createCtrl.submitQuiz()" aria-label="Submit" class="md-primary md-raised pull-right"> Finish </md-button>
+			<md-button ng-click="crudCtrl.addQuestion()" aria-label="Add New Question" class="md-raised"> Add Question </md-button>
+			<md-button ng-click="crudCtrl.submitQuiz()" aria-label="Submit" class="md-primary md-raised pull-right"> Finish </md-button>
 		</div>
 	</div>
 
-	<!--<p><strong>Created Quiz</strong></p>
-    <p>{{createCtrl.createdQuiz}}</p>
+	<p><strong>Created Quiz</strong></p>
+    <p>{{crudCtrl.quiz}}</p>
     <p><strong>Created Quiz Key</strong></p>
-    <p>{{createCtrl.createdQuizKey}}</p>
+    <p>{{crudCtrl.quizKey}}</p>
     <p><strong>Created Quiz Worth</strong></p>
-    <p>{{createCtrl.createdQuestionsWorth}}</p>-->
+    <p>{{crudCtrl.createdQuestionsWorth}}</p>
 
 
 </form>
