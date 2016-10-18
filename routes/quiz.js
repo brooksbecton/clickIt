@@ -151,7 +151,7 @@ function Quizzer() {
       });
     });
   }
-  
+
   // Adding grade quiz here.
   this.writeAnswersToDB = function (ownerId, userId, quizId, answers) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
@@ -225,24 +225,12 @@ function Quizzer() {
   /**
    * 
    * 
-   * Routerses
+   * Routers
    * 
    * 
    */
   router.get('/', function (req, res) {
     res.sendFile("main.html", { root: path.join(__dirname, '../public/quiz') });
-  });
-  router.post('/quiz/get/', function (req, res) {
-    var quizId = req.body.quizId;
-    if (_this.quizExists(quizId)) {
-        _this.getQuizFromDB(quizId, function(quiz){
-          console.log(quiz);
-          res.send(quiz);
-        });
-    } else {
-      res.status(400);
-      res.send('fail');
-    }
   });
   router.post('/quiz/close/', function (req, res) {
     var quizId = req.body.quizId;
@@ -264,6 +252,30 @@ function Quizzer() {
     _this.writeQuizToDB(userId, quiz, answerKey, questionsWorth);
 
     res.send('success');
+  });
+  router.post('/quiz/get/', function (req, res) {
+    var quizId = req.body.quizId;
+
+    //Holds the quiz, answerKey, and questionPoints
+    var fullQuiz = {};
+
+    if (_this.quizExists(quizId)) {
+      _this.getQuizFromDB(quizId, function (quiz) {
+        fullQuiz.quiz = quiz;
+        _this.getAnswersFromQuiz(quizId, function (answers) {
+          fullQuiz.answers = answers;
+          _this.getQuestionsWorthFromQuiz(quizId, function (answersWorth) {
+            fullQuiz.answerWorth = answersWorth;
+            console.log(fullQuiz);
+            res.send(fullQuiz);
+          });
+        });
+      });
+
+    } else {
+      res.status(400);
+      res.send('fail');
+    }
   });
   router.post('/quiz/join/', function (req, res) {
     var user = req.body.user;
