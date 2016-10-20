@@ -26,7 +26,6 @@ angular.module("quizModule").controller('quizCtrl', function ($http, $location, 
   }
 
   $scope.joinQuiz = function (quizId) {
-
     if ($scope.userSignedIn()) {
       var data = { "quizId": quizId };
 
@@ -36,7 +35,7 @@ angular.module("quizModule").controller('quizCtrl', function ($http, $location, 
         url: 'quiz/get/'
       }).then(function success(response) {
 
-        var quiz = response.data;
+        var quiz = response.data.quiz.quiz;
         $scope.quizAnswers = initAnswers(quiz);
         $scope.quiz = quiz;
       }, function error(response) {
