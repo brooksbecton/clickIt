@@ -208,14 +208,12 @@ function Quizzer() {
 
     _this.getUserAnswersFromQuiz(quizId, userId, function (answers) {
       userAnswers = answers;
-    })
+    });
 
     keyLength = answerKey.length;
-    console.log(answerKey)
-    console.log(keyLength)
+    console.log(answerKey);
+    console.log(keyLength);
     var score = 0;
-    for (i = 0; i < keyLength; i++) {
-      if (answerKey[i] == userAnswers[i]) {
 
     for (i = 0; i < keyLength; i++){
       
@@ -230,7 +228,7 @@ function Quizzer() {
       if (correct > 0){
         score += questionsWorth[i];
       }
-      console.log(i)
+      console.log(i);
     }
 
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
