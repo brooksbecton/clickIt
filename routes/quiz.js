@@ -211,19 +211,34 @@ function Quizzer() {
     })
 
     keyLength = answerKey.length;
+    console.log(answerKey)
+    console.log(keyLength)
     var score = 0;
+<<<<<<< Updated upstream
     for (i = 0; i < keyLength; i++) {
       if (answerKey[i] == userAnswers[i]) {
+=======
+    for (i = 0; i < keyLength; i++){
+      
+      var correct = 0;
+      for (j = 0; j < answerKey[i].length; j++){
+        
+        if (answerKey[i][j] == userAnswers[i]){
+          correct++;
+        }
+      }
+
+      if (correct > 0){
+>>>>>>> Stashed changes
         score += questionsWorth[i];
       }
+      console.log(i)
     }
 
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
       score
     });
-
   }
-
   /**
    * 
    * 
