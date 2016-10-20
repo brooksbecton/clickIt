@@ -214,10 +214,9 @@ function Quizzer() {
     console.log(answerKey)
     console.log(keyLength)
     var score = 0;
-<<<<<<< Updated upstream
     for (i = 0; i < keyLength; i++) {
       if (answerKey[i] == userAnswers[i]) {
-=======
+
     for (i = 0; i < keyLength; i++){
       
       var correct = 0;
@@ -229,7 +228,6 @@ function Quizzer() {
       }
 
       if (correct > 0){
->>>>>>> Stashed changes
         score += questionsWorth[i];
       }
       console.log(i)
