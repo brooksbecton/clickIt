@@ -94,7 +94,7 @@ function Quizzer() {
   function getQuizzesFromDB(callback) {
     var dbQuizzesRef = firebase.database().ref('Quizzes/');
 
-    dbQuizzesRef.on('value', function (snapshot) {
+    dbQuizzesRef.once('value', function (snapshot) {
       callback(snapshot.val())
     });
   }
@@ -103,10 +103,8 @@ function Quizzer() {
     var ownerId = "";
     var userQuizRef = firebase.database().ref('Quizzes/' + quizId + "/");
 
-    userQuizRef.on('value', function (snapshot) {
+    userQuizRef.once('value', function (snapshot) {
       ownerId = snapshot.val().ownerId;
-      // console.log("getOwnerIdFromQuizId " + "with " + quizId);
-      // console.log("found: " + ownerId);
       callback(ownerId);
     });
 
@@ -115,7 +113,7 @@ function Quizzer() {
   this.getAnswersFromQuiz = function (quizId, callback) {
     _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/');
-      userQuizRef.on('value', function (snapshot) {
+      userQuizRef.once('value', function (snapshot) {
         answerKey = snapshot.val().answerKey;
         callback(answerKey);
       });
@@ -125,7 +123,7 @@ function Quizzer() {
   this.getUserAnswersFromQuiz = function (quizId, userId, callback) {
     _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/answers/' + userId + '/');
-      userQuizRef.on('value', function (snapshot) {
+      userQuizRef.once('value', function (snapshot) {
         answers = snapshot.val().answers;
         callback(answers);
       });
@@ -135,17 +133,19 @@ function Quizzer() {
   this.getQuestionsWorthFromQuiz = function (quizId, callback) {
     _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/');
-      userQuizRef.on('value', function (snapshot) {
+
+      userQuizRef.once('value', function (snapshot) {
         questionsWorth = snapshot.val().questionsWorth;
         callback(questionsWorth);
       });
+
     });
   }
 
   this.getQuizFromDB = function (quizId, callback) {
     _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/');
-      userQuizRef.on('value', function (snapshot) {
+      userQuizRef.once('value', function (snapshot) {
         quiz = snapshot.val();
         callback(quiz);
       });
@@ -167,12 +167,14 @@ function Quizzer() {
 
   // Added answerKey and questionsWorth to this. questionsWorth is an array of numbers that determine how much a question is worth.
   this.writeQuizToDB = function (ownerId, quiz, answerKey, questionsWorth) {
+    
     //Writing quiz to Users Tree
-    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').set({
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').update({
       quiz: quiz
     });
+
     //Writing quizId to Quizzes Composite Tree
-    firebase.database().ref('Quizzes/' + quiz['id']).set({
+    firebase.database().ref('Quizzes/' + quiz['id']).update({
       ownerId
     });
 
@@ -266,15 +268,13 @@ function Quizzer() {
           fullQuiz.answers = answers;
           _this.getQuestionsWorthFromQuiz(quizId, function (answersWorth) {
             fullQuiz.answerWorth = answersWorth;
-            console.log(fullQuiz);
             res.send(fullQuiz);
           });
         });
       });
 
     } else {
-      res.status(400);
-      res.send('fail');
+      res.send('fail', 400);
     }
   });
   router.post('/quiz/join/', function (req, res) {
@@ -322,6 +322,17 @@ function Quizzer() {
 
     res.send('success');
   });
+  router.post('/quiz/update/', function (req, res) {
+    var answerKey = req.body.answerKey;
+    var quiz = req.body.quiz;
+    var questionsWorth = req.body.questionsWorth;
+    var userId = req.body.userId;
+
+    res.send('success');
+        
+    _this.writeQuizToDB(userId, quiz, answerKey, questionsWorth);
+  });
+
 }
 
 firebase.initializeApp({
@@ -339,7 +350,7 @@ function demoInitQuiz(quizMaster) {
   quizMaster.openQuiz(quiz['id'], user['uid'], true);
 }
 function demoGetOwnerIdFromQuizId(quizMaster) {
-  var quizId = 'fatcat';
+  var quizId = 'H1u5d98yx';
   quizMaster.getOwnerIdFromQuizId(quizId, function (ownerId) {
     console.log('here');
     console.log('ownerID: ' + ownerId);
@@ -347,13 +358,13 @@ function demoGetOwnerIdFromQuizId(quizMaster) {
 
 }
 function demoGetAnswersFromQuiz(quizMaster) {
-  var quizId = 'fatcat';
+  var quizId = 'H1u5d98yx';
   quizMaster.getAnswersFromQuiz(quizId, function (answerKey) {
     console.log('answerKey: ' + answerKey);
   });
 }
 function demoGetQuestionsWorthFromQuiz(quizMaster) {
-  var quizId = 'Skcq9zFA';
+  var quizId = 'H1u5d98yx';
   quizMaster.getQuestionsWorthFromQuiz(quizId, function (worth) {
     console.log('Worth: ' + worth);
   });
@@ -369,4 +380,5 @@ quizMaster.__init__();
 // demoInitQuiz(quizMaster);
 // demoGetOwnerIdFromQuizId(quizMaster);
 // demoGetAnswersFromQuiz(quizMaster);
+// demoGetQuestionsWorthFromQuiz(quizMaster);
 module.exports = router;
