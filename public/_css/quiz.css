@@ -33,6 +33,9 @@
   h6 {
       font-family: 'Oswald', sans-serif;
   }
+  img{
+      width: 100%;
+  }
   .main-container .flex-margin {
       max-height: inherit;
       min-height: 100%;
@@ -71,8 +74,9 @@
   }
   .main-right {
       background-color: #FFF;
-      padding: 20px;
       overflow: auto;
+      padding-left: 20px;
+      padding-right: 20px;
   }
   .md-fab {
       float: right;
@@ -104,3 +108,10 @@
   .top-nav {
       background-color: #ffab40;
   }
+  @media only screen and (max-width: 600px) {
+    .main-logo{
+        padding-bottom: 5px;
+        padding-top: 5px;
+        width: 150px;
+    }
+}

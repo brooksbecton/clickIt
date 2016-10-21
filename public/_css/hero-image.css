@@ -1,0 +1,37 @@
+.hero-image-container{
+    position: relative;
+   width: 100%;
+    
+}
+
+.hero-image-text{
+   position: absolute; 
+   bottom: 0px; 
+   left: 0; 
+   right: 0px;
+   color: white; 
+   font-size: 1.5em; 
+   letter-spacing: -1px;  
+   background: rgb(0, 0, 0); /* fallback color */
+   background: rgba(0, 0, 0, 0.5);
+   padding: 7px;
+   margin: 0px;
+}
+
+
+@media only screen and (max-width: 960px) {
+.hero-image-text{
+
+   font-size: 1.2em;
+   padding: 5px; 
+
+}
+}
+@media only screen and (max-width: 600px) {
+.hero-image-text{
+
+   font-size: 1em;
+   padding: 5px; 
+
+}
+}
