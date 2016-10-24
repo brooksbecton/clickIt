@@ -9,131 +9,42 @@
 	<link href="//fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="/public/_css/quiz.css">
 	<link rel="stylesheet" type="text/css" href="/public/_css/hero-image.css">
+	<link rel="stylesheet" type="text/css" href="/public/_css/welcome.css">
 	<title ng-bind="$root.title + ' | Click It Quiz'"></title>
 </head>
 
 <body ng-cloak ng-controller="leftNavCtrl as lNavCtrl">
-	<div class="md-primary top-nav" flex layout="column" layout-align="center center" md-whiteframe="4">
+	<div class="md-primary top-nav" flex layout="column" layout-align="center center">
 		<div class="main-logo"><img src="/public/_imgs/klikitLogo.svg"></div>
 		<div layout="row">
-			<!--<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
-        <md-nav-item md-nav-href="#welcome" name="About">About</md-nav-item>
-        <md-nav-item md-nav-href="#join" name="Quiz">Quiz</md-nav-item>
-        <md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
-      </md-nav-bar>-->
+			<md-nav-bar md-selected-nav-item="currentNavItem" nav-bar-aria-label="navigation links">
+				<md-nav-item md-nav-href="#welcome" name="About">About</md-nav-item>
+				<md-nav-item md-nav-href="#join" name="Quiz">Quiz</md-nav-item>
+				<md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
+			</md-nav-bar>
 			<div><i class="sign-in-button material-icons" ng-click="googleSignIn()" ng-hide="userSignedIn()">person_outline</i></div>
 			<div><i class="sign-in-button material-icons" ng-click="signUserOut()" ng-show="userSignedIn()">person</i></div>
 
-			<div class="side-nav-button"><i class="material-icons " ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
+			<div class="side-nav-button"><i class="material-icons" ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
 		</div>
 	</div>
 	<div class="main-container" layout="row">
 
-		<div class="flex-margin" flex=5 hide-sm hide-xs></div>
+		<div class="flex-margin" flex=10 hide-sm hide-xs>
+			<div class="psuedo-background"></div>
+		</div>
 
-		<md-sidenav layout="column" class="md-primary left-side-nav" md-is-locked-open="$mdMedia('gt-xs')" md-component-id="leftNav">
-			<md-toolbar>
-				<h1 class="md-toolbar-tools">Quiz</h1>
-			</md-toolbar>
-			<md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Home'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
-				href="#welcome">About</md-button>
-			<md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Create'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
-				href="#create">Create</md-button>
-			<md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Take'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
-				href="#join">Join</md-button>
-			<md-button class="leftSideNavLink" ng-class="{ 'currentSelectedPage' : lNavCtrl.currentPage == 'Edit'}" ng-click="lNavCtrl.LeftNavClose('leftNav')"
-				href="#edit">Edit</md-button>
-		</md-sidenav>
-		<div flex class="main-right">
+		<div flex class="main-right" md-whiteframe="7">
 			<ng-view flex></ng-view>
 		</div>
-		<md-sidenav class="md-sidenav-right" md-is-locked-open="$mdMedia('gt-md')" md-component-id="right">
-			<md-toolbar class="md-theme-light">
-				<h1 class="md-toolbar-tools">User Hub</h1>
-				<md-content>
-					<md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
-						<md-card-title>
-							<md-card-title-text>
-								<span class="md-headline">CSCI Final Exam</span>
-								<span class="md-subhead">Mr. Bob</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm card-media"></div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">
-							<md-button>Join Quiz</md-button>
-						</md-card-actions>
-					</md-card>
 
-					<md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
-						<md-card-title>
-							<md-card-title-text>
-								<span class="md-headline">CSCI Database Exam</span>
-								<span class="md-subhead">Dr. Bob</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm card-media"></div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">
-							<md-button>Join Quiz</md-button>
-						</md-card-actions>
-					</md-card>
-
-					<md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
-						<md-card-title>
-							<md-card-title-text>
-								<span class="md-headline">Networking Exam</span>
-								<span class="md-subhead">Dr. An</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm card-media"></div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">
-							<md-button>Join Quiz</md-button>
-						</md-card-actions>
-					</md-card>
-
-					<md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
-						<md-card-title>
-							<md-card-title-text>
-								<span class="md-headline">Networking Exam</span>
-								<span class="md-subhead">Dr. An</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm card-media"></div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">
-							<md-button>Join Quiz</md-button>
-						</md-card-actions>
-					</md-card>
-
-					<md-card md-theme="{{ showDarkTheme ? 'dark-purple' : 'default' }}" md-theme-watch="">
-						<md-card-title>
-							<md-card-title-text>
-								<span class="md-headline">Networking Exam</span>
-								<span class="md-subhead">Dr. An</span>
-							</md-card-title-text>
-							<md-card-title-media>
-								<div class="md-media-sm card-media"></div>
-							</md-card-title-media>
-						</md-card-title>
-						<md-card-actions layout="row" layout-align="end center">
-							<md-button>Join Quiz</md-button>
-						</md-card-actions>
-					</md-card>
-				</md-content>
-			</md-toolbar>
-		</md-sidenav>
-
-		<div class="flex-margin" flex=5 hide-sm hide-xs></div>
+		<div class="flex-margin" flex=10 hide-sm hide-xs>
+			<div class="psuedo-background"></div>
+		</div>
 
 	</div>
-	<footer md-whiteframe="4">
-		<div layout="row" layout-align="center center">
+	<footer>
+		<div layout="row">
 			<div flex=20 hide-sm hide-xs></div>
 			<div flex-gt-md=20 flex=33>
 				<h4>Social</h4>
@@ -179,7 +90,7 @@
       angular.module("quizModule", ['ngRoute', 'ngMaterial'])
         .config(function($mdThemingProvider) {
           $mdThemingProvider.theme('default')
-            .primaryPalette('light-blue')
+            .primaryPalette('orange')
             .accentPalette('orange')
             .warnPalette('red');
           });

@@ -1,4 +1,10 @@
-<h1>Quiz does not exist</h1>
-<p>No quiz could be found by what you supplied</p>
+<div layout="row">
+	<div ng-include="'/public/quiz/partials/leftQuizNav.html'"></div>
+	<div layout-padding>
 
-<md-button class="md-primary" ng-href="#/join">Try again?</md-button>
+		<h1>Quiz does not exist</h1>
+		<p>No quiz could be found by what you supplied</p>
+
+		<md-button class="md-primary" ng-href="#/join">Try again?</md-button>
+	</div>
+</div>

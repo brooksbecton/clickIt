@@ -1,26 +1,31 @@
-<div ng-hide="quiz" ng-init="getQuizIdFromParam()">
-    <h1>Join a Quiz</h1>
-        <md-input-container class="md-block" flex-gt-sm="">
-            <label>Quiz ID</label>
-            <input ng-model="joinQuizId" type="text">
-        </md-input-container>
-        <md-button type="submit" aria-label="Submit" class="md-primary md-raised" ng-click="joinQuiz(joinQuizId)"> Submit </md-button>
-</div>
-<div ng-show="quiz">
-    <h1 ng-bind="quiz.quizName"></h1>
-    <form name="quizForm">
-        <div ng-repeat="(key, question) in quiz.questions">
-            <h3 ng-bind="question.question"></h3>
-            <md-radio-group ng-model="quizAnswers[key]" required>
-                <md-radio-button ng-repeat="answer in question.answers" aria-label="{{answer}}" value="{{answer}}">
-                    <p ng-bind="answer"></p>
-                </md-radio-button>
-            </md-radio-group>
-        </div>
-        <div ng-hide="quizForm.$invalid">
-            <md-button type="submit" ng-click="submitQuizAnswers(quiz.id)" class="md-raised md-primary pull-right">
-                Submit &#x2714;
-            </md-button>
-        </div>
-    </form>
+<div layout="row">
+	<div ng-include="'/public/quiz/partials/leftQuizNav.html'"></div>
+	<div flex layout-padding>
+		<h1>Join a Quiz</h1>
+		<div ng-hide="quiz" ng-init="getQuizIdFromParam()">
+			<md-input-container class="md-block" flex-gt-sm="">
+				<label>Quiz ID</label>
+				<input ng-model="joinQuizId" type="text">
+			</md-input-container>
+			<md-button type="submit" aria-label="Submit" class="md-primary md-raised" ng-click="joinQuiz(joinQuizId)"> Submit </md-button>
+		</div>
+		<div ng-show="quiz">
+			<h1 ng-bind="quiz.quizName"></h1>
+			<form name="quizForm">
+				<div ng-repeat="(key, question) in quiz.questions">
+					<h3 ng-bind="question.question"></h3>
+					<md-radio-group ng-model="quizAnswers[key]" required>
+						<md-radio-button ng-repeat="answer in question.answers" aria-label="{{answer}}" value="{{answer}}">
+							<p ng-bind="answer"></p>
+						</md-radio-button>
+					</md-radio-group>
+				</div>
+				<div ng-hide="quizForm.$invalid">
+					<md-button type="submit" ng-click="submitQuizAnswers(quiz.id)" class="md-raised md-primary pull-right">
+						Submit &#x2714;
+					</md-button>
+				</div>
+			</form>
+		</div>
+	</div>
 </div>

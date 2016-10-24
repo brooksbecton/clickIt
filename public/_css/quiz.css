@@ -39,8 +39,6 @@
   .main-container .flex-margin {
       max-height: inherit;
       min-height: 100%;
-      background-color: rgba(220, 220, 220, 0.53);
-      ;
   }
   footer {
       background-color: #ffab40;
@@ -62,6 +60,13 @@
   .leftSideNavLink {
       font-size: 17px;
   }
+  .left-side-quiz-nav{
+      height: 100%;
+  }
+  .main-container{
+      background-color: #cccccc;
+      padding-bottom: 6vh;     
+  }
   .main-logo {
       padding: 20px;
       width: 250px;
@@ -75,8 +80,9 @@
   .main-right {
       background-color: #FFF;
       overflow: auto;
-      padding-left: 20px;
-      padding-right: 20px;
+  }
+  .main-right > div{
+      padding-right: 10px;
   }
   .md-fab {
       float: right;
@@ -87,12 +93,20 @@
   p{
       font-family: 'Roboto', sans-serif;
   }
+
+  .psuedo-background{
+      background-color: #03a9f4;
+      height: 150px;
+  }
+
   .pull-left {
       float: left;
   }
   .pull-right {
       float: right;
   }
+
+
   .sign-in-button {
       float: right;
       position: absolute;
@@ -106,7 +120,7 @@
       top: 15px;
   }
   .top-nav {
-      background-color: #ffab40;
+      background-color: #03a9f4;
   }
   @media only screen and (max-width: 600px) {
     .main-logo{
