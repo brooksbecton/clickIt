@@ -34,8 +34,7 @@ angular.module("quizModule").controller('quizCtrl', function ($http, $location, 
         method: 'POST',
         url: 'quiz/get/'
       }).then(function success(response) {
-
-        var quiz = response.data.quiz.quiz;
+        var quiz = response.data.quiz.quiz;        
         $scope.quizAnswers = initAnswers(quiz);
         $scope.quiz = quiz;
       }, function error(response) {

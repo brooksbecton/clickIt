@@ -153,15 +153,23 @@ function Quizzer() {
   }
 
   // Adding grade quiz here.
-  this.writeAnswersToDB = function (ownerId, userId, quizId, answers) {
+  this.writeAnswersToDB = function (ownerId, userId, quizId, answers, callback) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
       answers
     });
+
+    //callback(ownerId, quizId, userId, _this.writeScoreToDB);
   }
 
   this.writeUserOnQuizToDB = function (ownerId, quizId, user) {
     firebase.database().ref('Users/' + ownerId + /quizzes/ + quizId + /users/ + user['uid']).set({
       user
+    });
+  }
+
+  this.writeScoreToDB = function (ownerId, quizId, userId, score){
+    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
+      score
     });
   }
 
@@ -193,7 +201,7 @@ function Quizzer() {
     });
   }
 
-  this.gradeQuiz = function (ownerId, quizId, userId) {
+  this.gradeQuiz = function (ownerId, quizId, userId, callback) {
     var answerKey = [];
     var questionsWorth = [];
     var userAnswers = [];
@@ -231,9 +239,7 @@ function Quizzer() {
       console.log(i);
     }
 
-    firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
-      score
-    });
+    callback(ownerId, quizId, userId, score)    
   }
   /**
    * 
@@ -313,10 +319,10 @@ function Quizzer() {
       var ownerId = "";
       _this.getOwnerIdFromQuizId(quizId, function (oId) {
         ownerId = oId;
+        _this.writeAnswersToDB(ownerId, userId, quizId, answers, _this.gradeQuiz);
       });
 
-      _this.writeAnswersToDB(ownerId, userId, quizId, answers);
-      _this.gradeQuiz(ownerId, quizId, userId);
+      //_this.gradeQuiz(ownerId, quizId, userId, _this.writeScoreToDB);
 
       res.send('success');
     } else {
