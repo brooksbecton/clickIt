@@ -94,7 +94,7 @@ function Quizzer() {
   function getQuizzesFromDB(callback) {
     var dbQuizzesRef = firebase.database().ref('Quizzes/');
 
-    dbQuizzesRef.once('value', function (snapshot) {
+    dbQuizzesRef.on('value', function (snapshot) {
       callback(snapshot.val())
     });
   }
