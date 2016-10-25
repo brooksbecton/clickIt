@@ -158,7 +158,15 @@ function Quizzer() {
       answers
     });
 
-    //callback(ownerId, quizId, userId, _this.writeScoreToDB);
+    var answerKey = [];
+    var questionsWorth = [];
+    _this.getAnswersFromQuiz(quizId, function (aKey) {
+        answerKey = aKey;
+        _this.getQuestionsWorthFromQuiz(quizId, function (worth) {
+          questionsWorth = worth;
+          callback(ownerId, quizId, userId, answerKey, questionsWorth, answers, _this.writeScoreToDB);
+        });
+    });
   }
 
   this.writeUserOnQuizToDB = function (ownerId, quizId, user) {
@@ -201,22 +209,7 @@ function Quizzer() {
     });
   }
 
-  this.gradeQuiz = function (ownerId, quizId, userId, callback) {
-    var answerKey = [];
-    var questionsWorth = [];
-    var userAnswers = [];
-
-    _this.getAnswersFromQuiz(quizId, function (aKey) {
-      answerKey = aKey;
-    });
-
-    _this.getQuestionsWorthFromQuiz(quizId, function (worth) {
-      questionsWorth = worth;
-    });
-
-    _this.getUserAnswersFromQuiz(quizId, userId, function (answers) {
-      userAnswers = answers;
-    });
+  this.gradeQuiz = function (ownerId, quizId, userId, answerKey, questionsWorth, userAnswers, callback) {
 
     keyLength = answerKey.length;
     console.log(answerKey);
@@ -224,10 +217,12 @@ function Quizzer() {
     var score = 0;
 
     for (i = 0; i < keyLength; i++){
-      
+      console.log("On loop " + i);
       var correct = 0;
+      console.log("answerKey[i].length = " + answerKey[i].length)
       for (j = 0; j < answerKey[i].length; j++){
-        
+        console.log("current Key " + answerKey[i][j])
+        console.log("userAnswers " + userAnswers[i])
         if (answerKey[i][j] == userAnswers[i]){
           correct++;
         }
@@ -235,11 +230,12 @@ function Quizzer() {
 
       if (correct > 0){
         score += questionsWorth[i];
+        console.log("Current score " + score)
       }
-      console.log(i);
+      
     }
-
-    callback(ownerId, quizId, userId, score)    
+    console.log("Pushin' dem scores! " + score)
+    callback(ownerId, quizId, userId, score)
   }
   /**
    * 
