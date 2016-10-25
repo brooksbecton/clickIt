@@ -29,7 +29,10 @@
 			<!-- Multiple Choice Quiz Option-->
 			<div ng-show="crudCtrl.quiz.type == 'multiChoice'">
 				<div layout="column" ng-repeat="question in crudCtrl.quiz.questions track by $index">
-					<h3>Question {{$index + 1}}</h3>
+					<div layout="row">
+						<h3 flex>Question {{$index + 1}}</h3>
+						<md-button class=""><i ng-click="crudCtrl.clearQuestion($index)" class="material-icons">clear</i></md-button>
+					</div>
 					<div layout-gt-sm="row">
 						<md-input-container flex class="md-block" required>
 							<label for="question{{$index + 1}}Text">Question</label>

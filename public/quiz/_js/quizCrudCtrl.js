@@ -39,6 +39,13 @@ angular.module("quizModule").controller('quizCrudCtrl', function ($http, $locati
 
   this.clearAnswer = function (questionId, answerId) {
     _this.quiz.questions[questionId].answers.splice(answerId, 1);
+    _this.quizKey[questionId].splice(answerId, 1);
+  }
+
+  this.clearQuestion = function (questionId) {
+    _this.quiz.questions.splice(questionId, 1);
+    _this.createdQuestionsWorth.splice(questionId, 1);
+
   }
 
   this.getQuiz = function (quizId) {
