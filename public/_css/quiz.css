@@ -79,7 +79,6 @@
   }
   .main-right {
       background-color: #FFF;
-      overflow: auto;
   }
   .main-right > div{
       padding-right: 10px;
