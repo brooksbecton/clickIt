@@ -1,4 +1,4 @@
-angular.module("quizModule").controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $rootScope, $scope) {
+app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $rootScope, $scope) {
 
   var _this = this;
   $scope.multiChoiceLetters = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J'];
