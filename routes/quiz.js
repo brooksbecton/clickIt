@@ -152,6 +152,23 @@ function Quizzer() {
     });
   }
 
+  this.getScoreFromDB = function (quizId, userId, callback) {
+
+    _this.getOwnerIdFromQuizId(quizId, function (ownerId){
+      var userRef = firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/");
+      userRef.once('value', function (snapshot) {
+        if (snapshot.hasChild(userId)){
+          var userScorRef = firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/');
+          userScorRef.once('value', function (snapshot) {
+            score = snapshot.val().score;
+            callback(score);
+          });
+        }
+      });
+    });
+
+  }
+
   // Adding grade quiz here.
   this.writeAnswersToDB = function (ownerId, userId, quizId, answers, callback) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
@@ -383,6 +400,14 @@ function demoGetQuestionsWorthFromQuiz(quizMaster) {
   });
 }
 
+function demoGetScoreOfUser(quizMaster) {
+  var quizId = 'fatcat';
+  var userId = '91aPci8asxWp9MyB4pEEGGqUUxu2'
+  quizMaster.getScoreFromDB(quizId, userId, function(score){
+    console.log('Score: ' + score)
+  });
+}
+
 var quizMaster = new Quizzer;
 
 var user = { 'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'provider': 'google' };
@@ -394,4 +419,5 @@ quizMaster.__init__();
 // demoGetOwnerIdFromQuizId(quizMaster);
 // demoGetAnswersFromQuiz(quizMaster);
 // demoGetQuestionsWorthFromQuiz(quizMaster);
+demoGetScoreOfUser(quizMaster);
 module.exports = router;
