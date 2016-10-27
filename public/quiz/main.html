@@ -22,8 +22,10 @@
 				<md-nav-item md-nav-href="#join" name="Quiz">Quiz</md-nav-item>
 				<md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
 			</md-nav-bar>
-			<div><i class="sign-in-button material-icons" ng-click="googleSignIn()" ng-hide="userSignedIn()">person_outline</i></div>
-			<div><i class="sign-in-button material-icons" ng-click="signUserOut()" ng-show="userSignedIn()">person</i></div>
+			<div ng-controller="signInDialogCtrl as dialogCtrl">
+				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-hide="userSignedIn()">person_outline</i>
+				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-show="userSignedIn()">person</i>
+			</div>
 
 			<div class="side-nav-button"><i class="material-icons" ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
 		</div>
@@ -76,6 +78,8 @@
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-aria.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular-messages.min.js"></script>
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular-route.js"></script>
+<script src="//cdn.firebase.com/libs/angularfire/2.1.0/angularfire.min.js"></script>
+
 
 <!-- Angular Material Library -->
 <script src="//ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.js"></script>
@@ -87,7 +91,7 @@
 <script src="//cdn.firebase.com/libs/angularfire/2.0.1/angularfire.min.js"></script>
 
 <script type="text/javascript">   
-      angular.module("quizModule", ['ngRoute', 'ngMaterial'])
+      var app = angular.module("quizModule", ['firebase', 'ngRoute', 'ngMaterial'])
         .config(function($mdThemingProvider) {
           $mdThemingProvider.theme('default')
             .primaryPalette('orange')
@@ -96,11 +100,13 @@
           });
   </script>
 
-<script src="/public/quiz/_js/routes.js"></script>
-<script src="/public/quiz/_js/quizCrudCtrl.js"></script>
-<script src="/public/quiz/_js/quizCtrl.js"></script>
+<!-- Controllers -->
 <script src="/public/quiz/_js/leftNavCtrl.js"></script>
+<script src="/public/quiz/_js/quizCtrl.js"></script>
+<script src="/public/quiz/_js/quizCrudCtrl.js"></script>
 <script src="/public/quiz/_js/quizHubCtrl.js"></script>
+<script src="/public/quiz/_js/routes.js"></script>
+<script src="/public/quiz/_js/signInDialogCtrl.js"></script>
 
 </html>
 
