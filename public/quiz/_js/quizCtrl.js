@@ -121,9 +121,15 @@ app.controller('quizCtrl', ['$firebaseAuth', '$http', '$location', '$rootScope',
       }
     }
 
-    $scope.userSignedIn = function(){
-      if(auth.$getAuth()) return true;
-      else return false;
+    $scope.userSignedIn = function () {
+      if (auth.$getAuth()) {
+        $scope.user = auth.$getAuth();
+        return true;
+      }
+      else {
+        $scope.user = null;
+        return false;
+      }
     }
 
   }])
