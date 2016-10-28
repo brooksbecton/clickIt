@@ -24,10 +24,8 @@
 			</md-nav-bar>
 			<div ng-controller="signInDialogCtrl as dialogCtrl">
 				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-hide="userSignedIn()">person_outline</i>
-				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-show="userSignedIn()">person</i>
+				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-show="userSignedIn()">exit_to_app</i>
 			</div>
-
-			<div class="side-nav-button"><i class="material-icons" ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
 		</div>
 	</div>
 	<div class="main-container" layout="row">
