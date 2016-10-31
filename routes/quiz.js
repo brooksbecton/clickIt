@@ -229,29 +229,30 @@ function Quizzer() {
   this.gradeQuiz = function (ownerId, quizId, userId, answerKey, questionsWorth, userAnswers, callback) {
 
     keyLength = answerKey.length;
-    console.log(answerKey);
-    console.log(keyLength);
     var score = 0;
 
     for (i = 0; i < keyLength; i++){
-      console.log("On loop " + i);
+
       var correct = 0;
-      console.log("answerKey[i].length = " + answerKey[i].length)
-      for (j = 0; j < answerKey[i].length; j++){
-        console.log("current Key " + answerKey[i][j])
-        console.log("userAnswers " + userAnswers[i])
-        if (answerKey[i][j] == userAnswers[i]){
+      var aKey = [];
+      if (typeof answerKey[i] == 'object'){
+        aKey = Object.keys(answerKey[i]).map(function(key) {return answerKey[i][key]; });
+      }
+      else {
+        aKey = answerKey[i];
+      }
+
+      for (j = 0; j < aKey.length; j++){
+        if (aKey[j] == userAnswers[i]){
           correct++;
         }
       }
 
       if (correct > 0){
         score += questionsWorth[i];
-        console.log("Current score " + score)
       }
       
     }
-    console.log("Pushin' dem scores! " + score)
     callback(ownerId, quizId, userId, score)
   }
   /**
@@ -388,7 +389,7 @@ function demoGetOwnerIdFromQuizId(quizMaster) {
 
 }
 function demoGetAnswersFromQuiz(quizMaster) {
-  var quizId = 'H1u5d98yx';
+  var quizId = 'HknHpQ21g';
   quizMaster.getAnswersFromQuiz(quizId, function (answerKey) {
     console.log('answerKey: ' + answerKey);
   });
@@ -419,5 +420,5 @@ quizMaster.__init__();
 // demoGetOwnerIdFromQuizId(quizMaster);
 // demoGetAnswersFromQuiz(quizMaster);
 // demoGetQuestionsWorthFromQuiz(quizMaster);
-demoGetScoreOfUser(quizMaster);
+// demoGetScoreOfUser(quizMaster);
 module.exports = router;
