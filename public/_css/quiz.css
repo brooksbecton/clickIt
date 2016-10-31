@@ -74,11 +74,9 @@
   md-sidenav {
       background-color: gainsboro;
   }
-  .main-container {
-      min-height: 100%;
-  }
   .main-right {
       background-color: #FFF;
+      min-height: 100%;
   }
   .main-right > div{
       padding-right: 10px;
