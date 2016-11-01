@@ -1,0 +1,9 @@
+<div layout="row">
+	<div ng-include="'/public/quiz/partials/leftQuizNav.html'"></div>
+	<div flex layout-padding>
+		<div class="side-nav-button"><i class="material-icons" ng-click="lNavCtrl.toggleLeft('leftNav')" hide-gt-xs>menu</i></div>
+		<h1>Not Signed In</h1>
+        <p>You are not currently signed in</p>
+        <md-button ng-click="showUserDialog($event)">Sign In</md-button>
+	</div>
+</div>

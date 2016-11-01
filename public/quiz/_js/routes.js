@@ -1,4 +1,4 @@
-angular.module("quizModule").config(function ($routeProvider) {
+app.config(function ($routeProvider) {
     $routeProvider
         .when("/400", {
             templateUrl: '/public/quiz/400.html',
@@ -28,6 +28,11 @@ angular.module("quizModule").config(function ($routeProvider) {
         .when("/join/:quizId?", {
             templateUrl: '/public/quiz/takeQuiz.html',
             title: "Take",
+            controller: 'quizCtrl'
+        })
+        .when("/notSignedIn", {
+            templateUrl: '/public/quiz/notSignedIn.html',
+            title: "Not Signed In",
             controller: 'quizCtrl'
         })
         .when("/quiz/success", {
