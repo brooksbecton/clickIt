@@ -10,7 +10,7 @@
 	<link rel="stylesheet" type="text/css" href="/public/_css/quiz.css">
 	<link rel="stylesheet" type="text/css" href="/public/_css/hero-image.css">
 	<link rel="stylesheet" type="text/css" href="/public/_css/welcome.css">
-	<title ng-bind="$root.title + ' | Click It Quiz'"></title>
+	<title ng-bind="$root.title + ' | Klikit Quiz'"></title>
 </head>
 
 <body ng-cloak ng-controller="leftNavCtrl as lNavCtrl">
@@ -22,9 +22,9 @@
 				<md-nav-item md-nav-href="#join" name="Quiz">Quiz</md-nav-item>
 				<md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
 			</md-nav-bar>
-			<div ng-controller="signInDialogCtrl as dialogCtrl">
-				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-hide="userSignedIn()">person_outline</i>
-				<i class="sign-in-button material-icons" ng-click="dialogCtrl.showAdvanced($event)" ng-show="userSignedIn()">exit_to_app</i>
+			<div>
+				<i class="sign-in-button material-icons" ng-click="showUserDialog($event)" ng-hide="userSignedIn()">person_outline</i>
+				<i class="sign-in-button material-icons" ng-click="showUserDialog($event)" ng-show="userSignedIn()">exit_to_app</i>
 			</div>
 		</div>
 	</div>
@@ -102,10 +102,9 @@
 <script src="/public/quiz/_js/leftNavCtrl.js"></script>
 <script src="/public/quiz/_js/quizCtrl.js"></script>
 <script src="/public/quiz/_js/quizCrudCtrl.js"></script>
-<script src="/public/quiz/_js/quizHubCtrl.js"></script>
 <script src="/public/quiz/_js/routes.js"></script>
-<script src="/public/quiz/_js/signInDialogCtrl.js"></script>
-
+<!-- Services -->
+<script src="/public/quiz/_js/services/userAccountDialog.js"></script>
 </html>
 
 <!--

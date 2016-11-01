@@ -45,7 +45,6 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
   this.clearQuestion = function (questionId) {
     _this.quiz.questions.splice(questionId, 1);
     _this.createdQuestionsWorth.splice(questionId, 1);
-
   }
 
   this.getQuiz = function (quizId) {
@@ -58,19 +57,15 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
         method: 'POST',
         url: 'quiz/get/'
       }).then(function success(response) {
-        console.log("getQuiz");
         _this.quiz = response.data.quiz.quiz;
         _this.quizKey = answersToBool(response.data.answers);
         _this.createdQuestionsWorth = response.data.answerWorth;
-
-        // $scope.quizAnswers = ;
       }, function error(response) {
         var errorKey = 'submitQuiz';
         $scope.errors[errorKey] = response.statusText;
         redirectToErrorPage('400');
       });
     } else {
-      console.log("User Not Logged In");
       var notSignedInPage = "notSignedIn";
       redirectToErrorPage(notSignedInPage);
     }
@@ -102,8 +97,6 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
    */
   function boolToAnswers(answerStrings) {
     answerStrings.forEach(function (question, qIndex) {
-      console.log(question);
-      console.log(typeof (question));
       if (typeof (question) == "Array") {
         question.forEach(function (correctAnswer, cIndex) {
           if (answerStrings[qIndex][cIndex] == true) {
@@ -113,7 +106,6 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
       }
       if (typeof (question) == "object") {
         for (key in question) {
-          console.log(key + ": " + question[key]);
           if (answerStrings[qIndex][key] == true) {
             answerStrings[qIndex][key] = _this.quiz.questions[qIndex].answers[key];
           }
@@ -151,7 +143,6 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
 
       });
     } else {
-      console.log("User Not Logged In");
       var notSignedInPage = "notSignedIn";
       redirectToErrorPage(notSignedInPage);
     }
@@ -182,39 +173,8 @@ app.controller('quizCrudCtrl', function ($http, $location, $mdSidenav, $route, $
 
       });
     } else {
-      console.log("User Not Logged In");
       var notSignedInPage = "notSignedIn";
       redirectToErrorPage(notSignedInPage);
-    }
-  }
-
-  function userSignedIn() {
-    var user = firebase.auth().currentUser;
-
-    if (user) {
-      if ($scope.user == undefined) {
-        $scope.user = user;
-        $scope.$apply;
-      }
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  var testQuiz = {
-    "answerKey": [["But doctor, wouldn't that cause a parabolic destabilization of the fission singularity?", "asdf"]],
-    "questionsWorth": [10],
-    "quiz": {
-      "id": "HJCM9MJJg",
-      "instructor": "The Overseer",
-      "open": true,
-      "questions": [{
-        "answers": ["But doctor, wouldn't that cause a parabolic destabilization of the fission singularity?", "Yeah? Up yours too, buddy!", "Say nothing, grab a nearby pipe and hit the scientist in the head to knock him out. For all you knew, he was planning to blow up the vault.", "Say nothing, but slip away before the scientist can continue his rant"],
-        "question": "You are approached by a frenzied Vault scientist, who yells, \"I'm going to put my quantum harmonizer in your photonic resonation chamber!\" What's your response?"
-      }],
-      "quizName": "G.O.A.T",
-      "type": "multiChoice"
     }
   }
 
