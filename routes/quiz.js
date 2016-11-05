@@ -120,6 +120,23 @@ function Quizzer() {
     });
   }
 
+  this.getQuestionsFromQuiz = function (ownerId, quizId, callback){
+    var questionRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/quiz/');
+    questionRef.once('value', function(snapshot) {
+      questions = snapshot.val().questions;
+      callback(questions);
+    });
+  }
+
+  this.getAllUserAnswersFromQuiz = function (ownerId, quizId, callback){
+    var answersRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/')
+    answersRef.once('value', function(snapshot){
+      answers = snapshot.val().answers;
+      callback(answers);
+    })
+
+  }
+
   this.getUserAnswersFromQuiz = function (quizId, userId, callback) {
     _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userQuizRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/answers/' + userId + '/');
@@ -169,7 +186,6 @@ function Quizzer() {
 
   }
 
-  // Adding grade quiz here.
   this.writeAnswersToDB = function (ownerId, userId, quizId, answers, callback) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').set({
       answers
@@ -254,6 +270,43 @@ function Quizzer() {
       
     }
     callback(ownerId, quizId, userId, score)
+  }
+
+  this.tallyAnswers = function (ownerId, quizId){
+    graphArray = []
+    _this.getQuestionsFromQuiz(ownerId, quizId, function(questions){
+      //console.log("length of object = " + questions.length)
+      for (i = 0; i < questions.length; i++){
+        graphArray[i] = {'question':questions[i].question}
+      }
+      //console.log(graphArray)
+      _this.getAllUserAnswersFromQuiz(ownerId, quizId, function(answers){
+        // Cycle through the different users that have taken the quiz
+        for (var key in answers){
+          if (answers.hasOwnProperty(key)) {
+            var value = answers[key].answers;
+            // Cycle through the current users answers.
+            for (j = 0; j < value.length; j++){
+              // If the object has the key, ++ the value
+              if (graphArray[j].hasOwnProperty(value[j])){
+                //graphArray[j].value[j]++
+                var temp = value[j];
+                var tempNum = Number(graphArray[j][temp]);
+                tempNum = tempNum + 1;
+                graphArray[j][temp] = tempNum;
+              }
+              // If the object doesn't have the key, set it to one.
+              else {
+                var temp = value[j];
+                graphArray[j][temp] = 1;
+              }//End else
+            }// End looping through a users answers
+          }// End if answers.hasOwnProperty
+        }// End looping through all users
+        console.log(graphArray);
+        return graphArray;
+      });
+    });
   }
   /**
    * 
@@ -409,6 +462,13 @@ function demoGetScoreOfUser(quizMaster) {
   });
 }
 
+function demoTallyAnswers(quizMaster) {
+  var quizId = 'utm';
+  var ownerId = 'URjfA80pOucgPReXYpjJo70t8Dh2';
+
+  quizMaster.tallyAnswers(ownerId, quizId);
+}
+
 var quizMaster = new Quizzer;
 
 var user = { 'uid': 'URjfA80pOucgPReXYpjJo70t8Dh2', 'email': 'test@test.test', 'provider': 'google' };
@@ -421,4 +481,5 @@ quizMaster.__init__();
 // demoGetAnswersFromQuiz(quizMaster);
 // demoGetQuestionsWorthFromQuiz(quizMaster);
 // demoGetScoreOfUser(quizMaster);
+// demoTallyAnswers(quizMaster);
 module.exports = router;
