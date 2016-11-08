@@ -24,8 +24,8 @@
 				<md-nav-item md-nav-href="#contactUs" name="Contact">Contact</md-nav-item>
 			</md-nav-bar>
 			<div>
-				<i class="sign-in-button material-icons" ng-click="showUserDialog($event)" ng-hide="userSignedIn()">person_outline</i>
-				<i class="sign-in-button material-icons" ng-click="showUserDialog($event)" ng-show="userSignedIn()">exit_to_app</i>
+				<md-button class="md-raised sign-in-button" ng-click="showUserDialog($event)" ng-hide="userSignedIn()">Sign In</md-button>
+				<md-button class="md-raised sign-in-button" ng-click="showUserDialog($event)" ng-show="userSignedIn()">Sign Out</md-button>
 			</div>
 		</div>
 	</div>

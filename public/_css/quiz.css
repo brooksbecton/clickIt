@@ -106,6 +106,7 @@
 
   .sign-in-button {
       float: right;
+      margin: 0px;
       position: absolute;
       right: 15px;
       top: 15px;
@@ -124,4 +125,10 @@
         padding-top: 5px;
         width: 150px;
     }
+    .sign-in-button {
+      float: right;
+      position: absolute;
+      right: 3px;
+      top: 3px;
+  }
 }
