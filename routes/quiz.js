@@ -120,17 +120,17 @@ function Quizzer() {
     });
   }
 
-  this.getQuestionsFromQuiz = function (ownerId, quizId, callback){
+  this.getQuestionsFromQuiz = function (ownerId, quizId, callback) {
     var questionRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/quiz/');
-    questionRef.once('value', function(snapshot) {
+    questionRef.once('value', function (snapshot) {
       questions = snapshot.val().questions;
       callback(questions);
     });
   }
 
-  this.getAllUserAnswersFromQuiz = function (ownerId, quizId, callback){
+  this.getAllUserAnswersFromQuiz = function (ownerId, quizId, callback) {
     var answersRef = firebase.database().ref('Users/' + ownerId + '/quizzes/' + quizId + '/')
-    answersRef.once('value', function(snapshot){
+    answersRef.once('value', function (snapshot) {
       answers = snapshot.val().answers;
       callback(answers);
     })
@@ -171,10 +171,10 @@ function Quizzer() {
 
   this.getScoreFromDB = function (quizId, userId, callback) {
 
-    _this.getOwnerIdFromQuizId(quizId, function (ownerId){
+    _this.getOwnerIdFromQuizId(quizId, function (ownerId) {
       var userRef = firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/");
       userRef.once('value', function (snapshot) {
-        if (snapshot.hasChild(userId)){
+        if (snapshot.hasChild(userId)) {
           var userScorRef = firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/');
           userScorRef.once('value', function (snapshot) {
             score = snapshot.val().score;
@@ -194,11 +194,11 @@ function Quizzer() {
     var answerKey = [];
     var questionsWorth = [];
     _this.getAnswersFromQuiz(quizId, function (aKey) {
-        answerKey = aKey;
-        _this.getQuestionsWorthFromQuiz(quizId, function (worth) {
-          questionsWorth = worth;
-          callback(ownerId, quizId, userId, answerKey, questionsWorth, answers, _this.writeScoreToDB);
-        });
+      answerKey = aKey;
+      _this.getQuestionsWorthFromQuiz(quizId, function (worth) {
+        questionsWorth = worth;
+        callback(ownerId, quizId, userId, answerKey, questionsWorth, answers, _this.writeScoreToDB);
+      });
     });
   }
 
@@ -208,7 +208,7 @@ function Quizzer() {
     });
   }
 
-  this.writeScoreToDB = function (ownerId, quizId, userId, score){
+  this.writeScoreToDB = function (ownerId, quizId, userId, score) {
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quizId + "/answers/" + userId + '/').update({
       score
     });
@@ -216,7 +216,7 @@ function Quizzer() {
 
   // Added answerKey and questionsWorth to this. questionsWorth is an array of numbers that determine how much a question is worth.
   this.writeQuizToDB = function (ownerId, quiz, answerKey, questionsWorth) {
-    
+
     //Writing quiz to Users Tree
     firebase.database().ref('Users/' + ownerId + "/quizzes/" + quiz['id'] + '/').update({
       quiz: quiz
@@ -243,52 +243,59 @@ function Quizzer() {
   }
 
   this.gradeQuiz = function (ownerId, quizId, userId, answerKey, questionsWorth, userAnswers, callback) {
+    console.log(answerKey);
 
-    keyLength = answerKey.length;
+    //If the quiz is not a poll
+    if(answerKey != undefined) {
+      var keyLength = answerKey.length;
+    }
+    else{
+      var keyLength = 0;
+    }
     var score = 0;
 
-    for (i = 0; i < keyLength; i++){
+    for (i = 0; i < keyLength; i++) {
 
       var correct = 0;
       var aKey = [];
-      if (typeof answerKey[i] == 'object'){
-        aKey = Object.keys(answerKey[i]).map(function(key) {return answerKey[i][key]; });
+      if (typeof answerKey[i] == 'object') {
+        aKey = Object.keys(answerKey[i]).map(function (key) { return answerKey[i][key]; });
       }
       else {
         aKey = answerKey[i];
       }
 
-      for (j = 0; j < aKey.length; j++){
-        if (aKey[j] == userAnswers[i]){
+      for (j = 0; j < aKey.length; j++) {
+        if (aKey[j] == userAnswers[i]) {
           correct++;
         }
       }
 
-      if (correct > 0){
+      if (correct > 0) {
         score += questionsWorth[i];
       }
-      
+
     }
     callback(ownerId, quizId, userId, score)
   }
 
-  this.tallyAnswers = function (ownerId, quizId){
+  this.tallyAnswers = function (ownerId, quizId) {
     graphArray = []
-    _this.getQuestionsFromQuiz(ownerId, quizId, function(questions){
+    _this.getQuestionsFromQuiz(ownerId, quizId, function (questions) {
       //console.log("length of object = " + questions.length)
-      for (i = 0; i < questions.length; i++){
-        graphArray[i] = {'question':questions[i].question}
+      for (i = 0; i < questions.length; i++) {
+        graphArray[i] = { 'question': questions[i].question }
       }
       //console.log(graphArray)
-      _this.getAllUserAnswersFromQuiz(ownerId, quizId, function(answers){
+      _this.getAllUserAnswersFromQuiz(ownerId, quizId, function (answers) {
         // Cycle through the different users that have taken the quiz
-        for (var key in answers){
+        for (var key in answers) {
           if (answers.hasOwnProperty(key)) {
             var value = answers[key].answers;
             // Cycle through the current users answers.
-            for (j = 0; j < value.length; j++){
+            for (j = 0; j < value.length; j++) {
               // If the object has the key, ++ the value
-              if (graphArray[j].hasOwnProperty(value[j])){
+              if (graphArray[j].hasOwnProperty(value[j])) {
                 //graphArray[j].value[j]++
                 var temp = value[j];
                 var tempNum = Number(graphArray[j][temp]);
@@ -413,7 +420,7 @@ function Quizzer() {
     var userId = req.body.userId;
 
     res.send('success');
-        
+
     _this.writeQuizToDB(userId, quiz, answerKey, questionsWorth);
   });
 
@@ -457,7 +464,7 @@ function demoGetQuestionsWorthFromQuiz(quizMaster) {
 function demoGetScoreOfUser(quizMaster) {
   var quizId = 'fatcat';
   var userId = '91aPci8asxWp9MyB4pEEGGqUUxu2'
-  quizMaster.getScoreFromDB(quizId, userId, function(score){
+  quizMaster.getScoreFromDB(quizId, userId, function (score) {
     console.log('Score: ' + score)
   });
 }
